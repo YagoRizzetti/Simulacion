@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="Generador.js"></script>
+    <title>TP3</title>
+</head>
+
+<body>
+    <h1>Peluqueria VIP</h1>
+
+    <!-- Formulario de datos -->
+    <div class="form-data">
+        <h2 class="title-div-1">Formulario de Carga de Datos</h2>
+        <fieldset class="fieldset">
+            <legend class="legend">Tiempo de Simulacion</legend>
+            <label class="label tiempo">Tiempo (horas)</label><input id="tiempo" class="input" type="number" placeholder="10" min="1" required>
+        </fieldset>
+        <fieldset class="fieldset fieldset-2">
+            <legend class="legend">Datos del Aprendiz</legend>
+            <label class="label probabilidad">Probabilidad de Atención</label><input id="tipo1" class="input" type="text" placeholder="0.60" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
+            <label class="label">Distribucion Uniforme Valor A</label><input id="tipo2" class="input" type="text" placeholder="0.25" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
+            <label class="label">Distribucion Uniforme Valor B</label><input id="tipo3" class="input" type="text" placeholder="0.15" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99">
+        </fieldset>
+        <fieldset class="fieldset">
+            <legend class="legend">Datos del Veterano A</legend>
+            <label class="label probabilidad">Probabilidad de Atención</label><input id="tipo1" class="input" type="text" placeholder="0.60" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
+            <label class="label">Distribucion Uniforme Valor A</label><input id="tipo2" class="input" type="text" placeholder="0.25" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
+            <label class="label">Distribucion Uniforme Valor B</label><input id="tipo3" class="input" type="text" placeholder="0.15" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99">
+        </fieldset>
+        <fieldset class="fieldset">
+            <legend class="legend">Datos del Veterano B</legend>
+            <label class="label probabilidad">Probabilidad de Atención</label><input id="tipo1" class="input" type="text" placeholder="0.60" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
+            <label class="label">Distribucion Uniforme Valor A</label><input id="tipo2" class="input" type="text" placeholder="0.25" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
+            <label class="label">Distribucion Uniforme Valor B</label><input id="tipo3" class="input" type="text" placeholder="0.15" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99">
+        </fieldset>
+        <fieldset class="fieldset">
+            <legend class="legend">Llegada de Clientes</legend>
+            <label class="label">Distribucion Uniforme Valor A</label><input id="tipo2" class="input" type="text" placeholder="0.25" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
+            <label class="label">Distribucion Uniforme Valor B</label><input id="tipo3" class="input" type="text" placeholder="0.15" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99">
+        </fieldset>
+        <fieldset class="fieldset">
+            <legend class="legend">Rango de la Muestra a visualizar</legend>
+            <div class="div-inline">
+                <div class="div-2">
+                    <label class="label label-2">Desde la Fila:</label>
+                    <input id="rangoDesde" class="input input-2" type="number" placeholder="100" required min="1">
+                </div>
+                <div class="div-2">
+                    <label class="label label-2">Hasta la Fila:</label>
+                    <input id="rangoHasta" class="input input-2" type="number" placeholder="200" required>
+                </div>
+            </div>
+        </fieldset>
+        <div class="div-button-2">
+            <button class="button submit" type="button" onclick="generarDatos(obtenerDatosFormulario())">Generar Datos</button>
+            <button class="button reset" type="reset"  onclick="limpiarFormulario()">Limpiar Formulario</button>
+        </div>
+    </div>
+
+    <!-- Tabla de datos -->
+    <div class="div-table">
+        <h2 class="title-div-1">Tabla de Datos</h2>
+        <div class="table-container">
+            <table class="table-data">
+                <thead class="thead">
+                    <tr>
+                        <th>Numero de Mail</th>
+                        <th>RND Tipo Paciente</th>
+                        <th>Tipo de Paciente</th>
+                        <th>RND Necesita asesor</th>
+                        <th>Necesita asesor</th>
+                        <th>Cantidad de Asesores</th>
+                        <th>Asesores por Paciente</th>
+                        <th>Asesores por Asistio a la Clinica</th>
+                        <th>Asesores por Nunca Asistio a la Clinica</th>
+                    </tr>
+                </thead>
+                <tbody class="tbody">
+                    <!-- Aquí puedes agregar filas según tus necesidades -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
