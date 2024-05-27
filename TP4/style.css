@@ -21,9 +21,9 @@ h1{
     width: 80%;
     padding: 30px 50px;
     margin: auto;
-    background-color: #2226;
+    background-color: #c2421845;
     border-radius: 10px;
-    box-shadow: 0 0 25px #ccc77b;
+    box-shadow: 0 0 25px #bbb;
 }
 
 .fieldset{
@@ -63,11 +63,11 @@ h1{
     }
 
 .probabilidad{
-    margin-right: 3.62%;
+    margin-right: 5.35%;
 }
 
 .tiempo{
-    margin-right: 10%;
+    margin-right: 16%;
 }
 
 .input{
@@ -82,11 +82,11 @@ h1{
 }
 
 .input:valid{
-    background-color: #2226;
+    background-color: #27d6;
 }
 
 .input:invalid{
-    background-color: #a22c;
+    background-color: #b11c;
 }
 
 .input-2{
@@ -124,9 +124,9 @@ h2{
     width: 80%;
     padding: 30px 50px;
     margin: auto;
-    background-color: #2226;
+    background-color: #c2421845;
     border-radius: 10px;
-    box-shadow: 0 0 25px #ccc77b;
+    box-shadow: 0 0 25px #bbb;
     margin-top: 40px;
 }
 
@@ -147,7 +147,7 @@ th, td{
 }
 
 th{
-    background-color: #333;
+    background-color: #222;
     height: 40px;
 
 }
