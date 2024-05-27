@@ -2,15 +2,17 @@
 
 // Clase para los datos del formulario
 class DatosFormulario {
-    constructor(tamaño, tipos, asesor, rango) {
-        this.tamaño = tamaño;
-        this.tipos = tipos;
-        this.asesor = asesor;
+    constructor(tiempo, aprendiz, veteranoA, veteranoB, llegadaClientes, rango) {
+        this.tiempo = tiempo;
+        this.aprendiz = aprendiz;
+        this.veteranoA = veteranoA;
+        this.veteranoB = veteranoB;
+        this.llegadaClientes = llegadaClientes;
         this.rango = rango;
     }
 }
 
-class Mail{
+class Evento{
     constructor(numero, random1, tipo, random2, asesor, cantidaAsesores, asesoresXPaciente, asesoresXAsistio, asesoresXNuncaAsistio){
         this.numero = numero;
         this.random1 = random1;
@@ -35,18 +37,18 @@ const generarRandom = () =>{
 // Función para validar los datos del formulario
 function validarDatos(datosFormulario) {
     // Verificar si algún campo está vacío
-    if (!datosFormulario.tamaño || !datosFormulario.tipos[0] || !datosFormulario.tipos[1] || !datosFormulario.tipos[2] || !datosFormulario.asesor[0] || !datosFormulario.asesor[1] || !datosFormulario.asesor[2] || !datosFormulario.asesor[3] || !datosFormulario.asesor[4] || !datosFormulario.asesor[5]) {
+    if (!datosFormulario.tiempo || !datosFormulario.aprendiz[0] || !datosFormulario.aprendiz[1] || !datosFormulario.aprendiz[2] || !datosFormulario.veteranoA[0] || !datosFormulario.veteranoA[1] || !datosFormulario.veteranoA[2] || !datosFormulario.veteranoB[0] || !datosFormulario.veteranoB[1] || !datosFormulario.veteranoB[2] || !datosFormulario.llegadaClientes[0] || !datosFormulario.llegadaClientes[1] || !datosFormulario.rango[0] || !datosFormulario.rango[1]) {
         alert('Por favor, complete todos los campos.');
         return false; // La validación no pasó
     }
 
     // Verificar si algún valor es negativo
-    if (datosFormulario.tamaño < 0) {
+    if (datosFormulario.tiempo <= 0) {
         alert('El tamaño de la muestra debe ser un numero positivo.');
         return false; // La validación no pasó
     }
 
-    if (datosFormulario.tipos.some(valor => 1 >= valor <= 0) || datosFormulario.asesor.some(valor => 1 >= valor <= 0)) {
+    if (datosFormulario.aprendiz[0].some(valor => 1 >= valor <= 0) || datosFormulario.veteranoA[0].some(valor => 1 >= valor <= 0) || datosFormulario.veteranoB[0].some(valor => 1 >= valor <= 0)) {
         alert('Los valores de las probabilidades deben ser positivos entre 0,01 y 0,99.');
         return false; // La validación no pasó
     }
@@ -61,28 +63,8 @@ function validarDatos(datosFormulario) {
         return false;
     }
 
-    if (datosFormulario.rango[1] > datosFormulario.tamaño){
-        alert('El rango de filas es incorrecto. El valor hasta debe ser Menor o igual al tamaño de la muestra.');
-        return false;
-    }
-
-    if ((datosFormulario.tipos[0] + datosFormulario.tipos[1] + datosFormulario.tipos[2]) != 1){
+    if ((datosFormulario.aprendiz[0] + datosFormulario.veteranoA[0] + datosFormulario.veteranoB[0]) != 1){
         alert('La suma de las probabilidades de los tipos de destinatarios debe dar 1.');
-        return false;
-    }
-
-    if ((datosFormulario.asesor[0] + datosFormulario.asesor[1]) != 1){
-        alert('La suma de las probabilidades de los asesores para el destinatario paciente debe dar 1.');
-        return false;
-    }
-
-    if ((datosFormulario.asesor[2] + datosFormulario.asesor[3]) != 1){
-        alert('La suma de las probabilidades de los asesores para el destinatario que asistio a la clinica debe dar 1.');
-        return false;
-    }
-
-    if ((datosFormulario.asesor[4] + datosFormulario.asesor[5]) != 1){
-        alert('La suma de las probabilidades de los asesores para el destinatario que nunca asistio a la clinica debe dar 1.');
         return false;
     }
     // Si la validación pasa, retornar true
@@ -216,27 +198,33 @@ function generarDatos(datosFormulario) {
 
 // Obtener los valores de los inputs y crear un objeto de la clase DatosFormulario
 function obtenerDatosFormulario() {
-    const tamaño = parseInt(document.getElementById('tamaño').value);
-    const tipos = [
-        parseFloat(document.getElementById('tipo1').value),
-        parseFloat(document.getElementById('tipo2').value),
-        parseFloat(document.getElementById('tipo3').value)
+    const tiempo = parseInt(document.getElementById('tiempo').value);
+    const aprendiz = [
+        parseFloat(document.getElementById('probabilidadAprendiz').value),
+        parseFloat(document.getElementById('UniformeAAprendiz').value),
+        parseFloat(document.getElementById('UniformeBAprendiz').value)
     ];
-    const asesor = [
-        parseFloat(document.getElementById('asesorTipo1Si').value),
-        parseFloat(document.getElementById('asesorTipo1No').value),
-        parseFloat(document.getElementById('asesorTipo2Si').value),
-        parseFloat(document.getElementById('asesorTipo2No').value),
-        parseFloat(document.getElementById('asesorTipo3Si').value),
-        parseFloat(document.getElementById('asesorTipo3No').value)
+    const veteranoA = [
+        parseFloat(document.getElementById('probabilidadVeteranoA').value),
+        parseFloat(document.getElementById('UniformeAVeteranoA').value),
+        parseFloat(document.getElementById('UniformeBVeteranoA').value),
     ];
+    const veteranoB = [
+        parseFloat(document.getElementById('probabilidadVeteranoB').value),
+        parseFloat(document.getElementById('UniformeAVeteranoB').value),
+        parseFloat(document.getElementById('UniformeBVeteranoB').value),
+    ];
+    const llegadaClientes = [
+        parseInt(document.getElementById('UniformeALlegadaClientes').value),
+        parseInt(document.getElementById('UniformebLlegadaClientes').value)
+    ]
     const rango = [
         parseInt(document.getElementById('rangoDesde').value),
         parseInt(document.getElementById('rangoHasta').value)
     ]
 
     // Crear un objeto de la clase DatosFormulario con los valores obtenidos
-    const datosFormulario = new DatosFormulario(tamaño, tipos, asesor, rango);
+    const datosFormulario = new DatosFormulario(tiempo, aprendiz, veteranoA, veteranoB, llegadaClientes, rango);
 
     return datosFormulario;
 }
