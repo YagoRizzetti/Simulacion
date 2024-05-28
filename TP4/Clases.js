@@ -10,6 +10,24 @@ export class DatosFormulario {
     }
 }
 
+export class Fila{
+    constructor(numero, control, llegadaCliente, asignacionPeluquero, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, aprendiz, veteranoA, veteranoB, recaudacion, esperas, clientes){
+    this.numero = numero;
+    this.control = control;
+    this.llegadaCliente = llegadaCliente;
+    this.asignacionPeluquero = asignacionPeluquero;
+    this.finAtencionAprendiz = finAtencionAprendiz;
+    this.finAtencionVeteranoA = finAtencionVeteranoA;
+    this.finAtencionVeteranoB = finAtencionVeteranoB;
+    this.aprendiz = aprendiz;
+    this.veteranoA = veteranoA;
+    this.veteranoB = veteranoB;
+    this.recaudacion = recaudacion;
+    this.esperas = esperas;
+    this.clientes = clientes;
+    }
+}
+
 export class Control{
     constructor(evento, dia, reloj){
         this.evento = evento;

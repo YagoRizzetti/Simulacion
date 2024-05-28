@@ -1,3 +1,4 @@
+import "../Clases"
 // Obtener los valores de los inputs y crear un objeto de la clase DatosFormulario
 function obtenerDatosFormulario() {
     const tiempo = parseInt(document.getElementById('tiempo').value);
