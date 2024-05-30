@@ -9,20 +9,22 @@ export const calcularDemoraLlegada = (rndllegada, a , b) =>{
     return demora
 }
 
-export const calcularAsignacionPeluquero = (rndAsignacion, a , b) =>{
-    asignacion = calcularUniforme(rndAsignacion, a, b)
-}
-
-export const calcularFinAtencionAprendiz = (rndFinAtencionAprendiz, a , b) =>{
-
-}
-
-export const calcularFinAtencionVeteranoA = (rndFinAtencionVeteranoA, a , b) =>{
-
-}
-
-export const calcularFinAtencionVeteranoB = (rndFinAtencionVeteranoB, a , b) =>{
-
+export const calcularFinAtencion = (reloj, rndFinAtencion, peluquero, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB) =>{
+    if(peluquero == "Aprendiz"){
+        let demoraAtencion = calcularUniforme(rndFinAtencion, distribucionAprendiz[0], distribucionAprendiz[1]);
+        let finAtencion = reloj + demoraAtencion;
+        return(demoraAtencion, finAtencion);
+    }
+    if(peluquero == "Veterano A"){
+        let demoraAtencion = calcularUniforme(rndFinAtencion, distribucionVeteranoA[0], distribucionVeteranoA[1]);
+        let finAtencion = reloj + demoraAtencion;
+        return(demoraAtencion, finAtencion);
+    }
+    if(peluquero == "Veterano B"){
+        let demoraAtencion = calcularUniforme(rndFinAtencion, distribucionVeteranoB[0], distribucionVeteranoB[1]);
+        let finAtencion = reloj + demoraAtencion;
+        return(demoraAtencion, finAtencion);
+    }
 }
 
 export const seleccionarPeluquero = (rnd, probabilidadAprendiz, probabilidadVeteranoA) =>{
@@ -54,4 +56,18 @@ export const verificarEstadoPeluquero = (peluqueroAsignado, aprendiz, veteranoA,
     else{
         return false;
     }
+}
+
+// Cambiando el estado del Peluquero Asignado
+export const cambiarEstadoPeluquero = (peluqueroAsignado, nuevoEstado, aprendiz, veteranoA, veteranoB) =>{
+    if(peluqueroAsignado == "Aprendiz"){
+        aprendiz.estado = nuevoEstado;
+    }
+    if(peluqueroAsignado == "Veterano A"){
+        veteranoA.estado = nuevoEstado;
+    }
+    if(peluqueroAsignado == "Veterano B"){
+        veteranoB.estado = nuevoEstado;
+    }
+    
 }

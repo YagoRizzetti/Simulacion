@@ -13,6 +13,9 @@ function generarDatos(datosFormulario) {
         // Aquí puedes implementar la lógica para generar los datos utilizando los valores de datosFormulario
         console.log('Generando datos...');
         console.log(datosFormulario);
+        let distribucionAprendiz = [datosFormulario.Aprendiz[1], datosFormulario.Aprendiz[2]]
+        let distribucionVeteranoA = [datosFormulario.VeteranoA[1], datosFormulario.VeteranoA[2]]
+        let distribucionVeteranoB= [datosFormulario.VeteranoB[1], datosFormulario.VeteranoB[2]]
         const dias = datosFormulario.tiempo;
         let dia = 0;
         let reloj = 0;
@@ -46,20 +49,11 @@ function generarDatos(datosFormulario) {
                     let rndAsignacion = generarRandom();
                     let peluqueroAsignado = seleccionarPeluquero(rndAsignacion, datosFormulario.Aprendiz[0], datosFormulario.VeteranoA[0]);
                     // Verificando si el peluquero esta libre
-                    peluqueroLibre = verificarEstadoPeluquero(peluqueroAsignado, Aprendiz, VeteranoA, VeteranoB)
-                    if(peluqueroLibre){
+                    if(verificarEstadoPeluquero(peluqueroAsignado, Aprendiz, VeteranoA, VeteranoB)){
                         // Calcular Fin de Atencion del Peluquero
                         let rndFinAtencion = generarRandom();
-                        // Cambiando el estado del Peluquero Asignado
-                        if(peluqueroAsignado == "Aprendiz"){
-                            Aprendiz.estado = "Ocupado";
-                        }
-                        if(peluqueroAsignado == "Veterano A"){
-                            VeteranoA.estado = "Ocupado";
-                        }
-                        if(peluqueroAsignado == "Veterano B"){
-                            VeteranoB.estado = "Ocupado";
-                        }
+                        let demoraAtencion , finAtencion = calcularFinAtencion(rndFinAtencion, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB);
+                        cambiarEstadoPeluquero(peluqueroAsignado, "Ocupado", Aprendiz, VeteranoA, VeteranoB);
                     }
                     else{
 
