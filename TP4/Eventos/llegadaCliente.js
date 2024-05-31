@@ -9,7 +9,7 @@ export const calcularProximaLlegada = (uniformaALlegada, uniformeBLlegada, contr
     let control = new Control("llegada Cliente", dia, momentoLlegada);
     controlEventos.push(control);
     controlEventos.sort();
-    proximaLlegada = (rndllegada,demora,momentoLlegada)
+    proximaLlegada.random, proximaLlegada.demora, proximaLlegada.llegada = rndllegada, demora, momentoLlegada;
 }
 
 export const asignarPeluquero = (peluqueroAsignado, probabilidadAprendiz, probabilidadVeteranoA) =>{
@@ -22,17 +22,17 @@ export const calcularFinAtencion = (rndFinAtencion, reloj, peluquero, demoraAten
     if(peluquero == "Aprendiz"){
         demoraAtencion = calcularUniforme(rndFinAtencion, distribucionAprendiz[0], distribucionAprendiz[1]);
         finAtencion = reloj + demoraAtencion;
-        finAtencionAprendiz = (rndFinAtencion,demoraAtencion,finAtencion)
+        finAtencionAprendiz.random, finAtencionAprendiz.demora, finAtencionAprendiz.finAtencion = rndFinAtencion,demoraAtencion,finAtencion;
     }
     if(peluquero == "Veterano A"){
         demoraAtencion = calcularUniforme(rndFinAtencion, distribucionVeteranoA[0], distribucionVeteranoA[1]);
         finAtencion = reloj + demoraAtencion;
-        finAtencionVeteranoA = (rndFinAtencion,demoraAtencion,finAtencion)
+        finAtencionVeteranoA.random, finAtencionVeteranoA.demora, finAtencionVeteranoA.finAtencion = rndFinAtencion,demoraAtencion,finAtencion;
     }
     if(peluquero == "Veterano B"){
         demoraAtencion = calcularUniforme(rndFinAtencion, distribucionVeteranoB[0], distribucionVeteranoB[1]);
         finAtencion = reloj + demoraAtencion;
-        finAtencionVeteranoB = (rndFinAtencion,demoraAtencion,finAtencion)
+        finAtencionVeteranoB.random, finAtencionVeteranoB.demora, finAtencionVeteranoB.finAtencion = rndFinAtencion,demoraAtencion,finAtencion;
     }
 }
 
