@@ -7,6 +7,7 @@ import { calcularMomentoLlegada } from "./utils/Calculos";
 import { generarRandom } from "./utils/GeneradorRandoms";
 import { calcularProximaLlegada , asignarPeluquero, calcularFinAtencion} from "./Eventos/llegadaCliente";
 import { ocuparPeluquero } from "./EstadosPeluquero/ocupar";
+import { liberarPeluquero } from "./EstadosPeluquero/liberar";
 
 // Función para generar los datos con base en los datos del formulario
 function generarDatos(datosFormulario) {
@@ -71,10 +72,20 @@ function generarDatos(datosFormulario) {
                 }
                 peluqueroAsignado = "";
             }
+            // Evento Fin de Atencion
             if(controlEventos[0].evento = "Fin Atencion"){
-                verificarFinAtencionPeluquero(peluqueroFinAtencion, reloj, Aprendiz, VeteranoA, VeteranoB);
-
+                verificarFinAtencionPeluquero(peluqueroFinAtencion, reloj, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB);
+                // Controlar cola de Peluquero que termino de Atender (si no tiene clientes en cola)
+                if(controlarColaPeluquero(peluqueroFinAtencion, Aprendiz, VeteranoA, VeteranoB)){
+                    liberarPeluquero(peluqueroFinAtencion, Aprendiz, VeteranoA, VeteranoB);
+                }
+                esperas.esperaSimultanea --;
+                sacarClienteDeEspera(peluqueroFinAtencion,controlClientes);
+                actualizarRecaudacion(peluqueroFinAtencion, Aprendiz, VeteranoA, VeteranoB, recaudacion);
+                reducirColaPeluquero(peluqueroFinAtencion, Aprendiz, VeteranoA, VeteranoB);
+                aumentarclientesAtendidosPeluquero(peluqueroFinAtencion, Aprendiz, VeteranoA, VeteranoB);
             }
+            controlEventos.pop(controlEventos[0]);
             let rnd2 = generarRandom();
             console.log(rnd1);
             console.log(rnd2);

@@ -1,12 +1,12 @@
 // Liberar Peluquero Asignado
-export const liberarPeluquero = (peluqueroAsignado, aprendiz, veteranoA, veteranoB) =>{
-    if(peluqueroAsignado == "Aprendiz"){
+export const liberarPeluquero = (peluqueroFinAtencion, aprendiz, veteranoA, veteranoB) =>{
+    if(peluqueroFinAtencion == "Aprendiz"){
         aprendiz.estado = "Ocupado";
     }
-    if(peluqueroAsignado == "Veterano A"){
+    if(peluqueroFinAtencion == "Veterano A"){
         veteranoA.estado = "Ocupado";
     }
-    if(peluqueroAsignado == "Veterano B"){
+    if(peluqueroFinAtencion == "Veterano B"){
         veteranoB.estado = "Ocupado";
     }
     
