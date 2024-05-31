@@ -121,7 +121,8 @@ export class Esperas{
 }
 
 export class Cliente{
-    constructor(estado, peluquero, momentoRefresco, refresco){
+    constructor(numero, estado, peluquero, momentoRefresco, refresco){
+        this.numero = numero;
         this.estado = estado;
         this.peluquero = peluquero;
         this.momentoRefresco = momentoRefresco;

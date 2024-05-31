@@ -9,24 +9,6 @@ export const calcularDemoraLlegada = (rndllegada, a , b) =>{
     return demora
 }
 
-export const calcularFinAtencion = (reloj, rndFinAtencion, peluquero, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB) =>{
-    if(peluquero == "Aprendiz"){
-        let demoraAtencion = calcularUniforme(rndFinAtencion, distribucionAprendiz[0], distribucionAprendiz[1]);
-        let finAtencion = reloj + demoraAtencion;
-        return(demoraAtencion, finAtencion);
-    }
-    if(peluquero == "Veterano A"){
-        let demoraAtencion = calcularUniforme(rndFinAtencion, distribucionVeteranoA[0], distribucionVeteranoA[1]);
-        let finAtencion = reloj + demoraAtencion;
-        return(demoraAtencion, finAtencion);
-    }
-    if(peluquero == "Veterano B"){
-        let demoraAtencion = calcularUniforme(rndFinAtencion, distribucionVeteranoB[0], distribucionVeteranoB[1]);
-        let finAtencion = reloj + demoraAtencion;
-        return(demoraAtencion, finAtencion);
-    }
-}
-
 export const seleccionarPeluquero = (rnd, probabilidadAprendiz, probabilidadVeteranoA) =>{
     probabilidadVeteranoA = probabilidadAprendiz + probabilidadVeteranoA
     let peluquero = ""
@@ -58,16 +40,19 @@ export const verificarEstadoPeluquero = (peluqueroAsignado, aprendiz, veteranoA,
     }
 }
 
-// Cambiando el estado del Peluquero Asignado
-export const cambiarEstadoPeluquero = (peluqueroAsignado, nuevoEstado, aprendiz, veteranoA, veteranoB) =>{
+export const calcularMomentoRefresco = (reloj) =>{
+    momentoRefresco = reloj + 1800;
+    return momentoRefresco;
+}
+
+export const aumentarColaPeluqueroAsignado = (peluqueroAsignado, aprendiz, veteranoA, veteranoB) =>{
     if(peluqueroAsignado == "Aprendiz"){
-        aprendiz.estado = nuevoEstado;
+        aprendiz.cola ++;
     }
     if(peluqueroAsignado == "Veterano A"){
-        veteranoA.estado = nuevoEstado;
+        veteranoA.cola ++;
     }
-    if(peluqueroAsignado == "Veterano B"){
-        veteranoB.estado = nuevoEstado;
+    else{
+        veteranoB.cola ++;
     }
-    
 }

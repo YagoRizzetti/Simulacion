@@ -2,9 +2,11 @@ import "./Clases";
 import "./utils/Validaciones"
 import "./utils/GeneradorRandoms"
 import "./utils/Calculos"
-import { Aprendiz, Control, Esperas, Evento, LlegadaCliente, Recaudacion, VeteranoA, VeteranoB } from "./Clases";
+import { Aprendiz, Cliente, Control, Esperas, Evento, Fila, FinAtencionAprendiz, FinAtencionVeteranoA, FinAtencionVeteranoB, LlegadaCliente, Recaudacion, VeteranoA, VeteranoB } from "./Clases";
 import { calcularMomentoLlegada } from "./utils/Calculos";
 import { generarRandom } from "./utils/GeneradorRandoms";
+import { calcularProximaLlegada , asignarPeluquero, calcularFinAtencion} from "./Eventos/llegadaCliente";
+import { ocuparPeluquero } from "./EstadosPeluquero/ocupar";
 
 // Función para generar los datos con base en los datos del formulario
 function generarDatos(datosFormulario) {
@@ -24,39 +26,42 @@ function generarDatos(datosFormulario) {
         let VeteranoA = new VeteranoA("Libre",0,0);
         let VeteranoB = new VeteranoB("Libre",0,0);
         let esperas = new Esperas(0,0);
-        let filasAMostrar = [];
+        let filasAMostrar = [Fila];
         // estructura de la lista (nombre del evento, segundos)
         let controlEventos = [Control];
-        let proximaLlegada = "";
-        let finAtencionAprendiz = "";
-        let finAtencionVeteranoA = "";
-        let finAtencionVeteranoB = "";
+        let controlClientes = [0, Cliente];
+        let proximaLlegada = new LlegadaCliente(0,0,0);
+        let finAtencionAprendiz = new FinAtencionAprendiz(0,0,0);
+        let finAtencionVeteranoA = new FinAtencionVeteranoA(0,0,0);
+        let finAtencionVeteranoB = new FinAtencionVeteranoB(0,0,0);
         let recaudacion = new Recaudacion(0,0,0,0);
+        let peluqueroAsignado = "";
+        let peluqueroFinAtencion = "";
+        let demoraAtencion = 0;
+        let finAtencion = 0;
+        let rndFinAtencion = 0;
         while (dia < dias || numeroFila <= 100000) {
             numeroFila ++;
-            reloj = reloj + controlEventos[0].reloj
+            reloj = reloj + (controlEventos[0].reloj - reloj);
             // Evento Llegada de Cliente
             if(controlEventos[0].evento = "llegada Cliente" || numeroFila == 1){
                 // Calculando y guardando la proxima llegada
-                let rndllegada = generarRandom();
-                let demora = calcularDemoraLlegada(rndllegada, datosFormulario.LlegadaClientes[0], datosFormulario.LlegadaClientes[1])
-                let momentoLlegada = reloj + demora;
-                let control = new Control("llegada Cliente", dia, momentoLlegada);
-                controlEventos.push(control);
-                controlEventos.sort();
+                calcularProximaLlegada(datosFormulario.LlegadaClientes[0], datosFormulario.LlegadaClientes[1], controlEventos, proximaLlegada);
                 // Generando la asignacion del peluquero para el cliente que acaba de llegar
                 if(controlEventos[0].evento = "llegada Cliente"){
-                    let rndAsignacion = generarRandom();
-                    let peluqueroAsignado = seleccionarPeluquero(rndAsignacion, datosFormulario.Aprendiz[0], datosFormulario.VeteranoA[0]);
+                    asignarPeluquero(peluqueroAsignado, datosFormulario.Aprendiz[0], datosFormulario.VeteranoA[0]);
                     // Verificando si el peluquero esta libre
                     if(verificarEstadoPeluquero(peluqueroAsignado, Aprendiz, VeteranoA, VeteranoB)){
                         // Calcular Fin de Atencion del Peluquero
-                        let rndFinAtencion = generarRandom();
-                        let demoraAtencion , finAtencion = calcularFinAtencion(rndFinAtencion, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB);
-                        cambiarEstadoPeluquero(peluqueroAsignado, "Ocupado", Aprendiz, VeteranoA, VeteranoB);
+                        calcularFinAtencion(rndFinAtencion, reloj, demoraAtencion, finAtencion, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB);
+                        ocuparPeluquero(peluqueroAsignado, Aprendiz, VeteranoA, VeteranoB);
                     }
+                    // Si el Peluquero Esta Ocupado
                     else{
-
+                        // Generando Nuevo Cliente
+                        generarNuevoCliente(controlClientes, esperas, peluqueroAsignado, reloj);
+                        // Actualizando la cola del peluquero Asignado
+                        aumentarColaPeluqueroAsignado(peluqueroAsignado, Aprendiz, VeteranoA, VeteranoB);
                         // Gestionando las Esperas
                         esperas.esperaSimultanea ++;
                         if (esperas.esperaSimultanea > esperas.maxEsperaSimultanea){
@@ -64,6 +69,11 @@ function generarDatos(datosFormulario) {
                         }
                     }
                 }
+                peluqueroAsignado = "";
+            }
+            if(controlEventos[0].evento = "Fin Atencion"){
+                verificarFinAtencionPeluquero(peluqueroFinAtencion, reloj, Aprendiz, VeteranoA, VeteranoB);
+
             }
             let rnd2 = generarRandom();
             console.log(rnd1);
