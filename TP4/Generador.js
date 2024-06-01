@@ -152,25 +152,48 @@ function generarDatos(datosFormulario) {
         } 
         filasAMostrar.push(ultimaFila);
 
-        let tablaMails = document.querySelector('.tbody');
+        let tablaFilas = document.querySelector('.tbody');
 
         // Limpiamos el contenido actual de la tabla
-        tablaMails.innerHTML = '';
+        tablaFilas.innerHTML = '';
     
-        // Iteramos sobre la lista de mails y creamos las filas de la tabla
+        // Iteramos sobre la lista de Filas y creamos las filas de la tabla
         filasAMostrar.forEach(fila => {
-            let fila = tablaMails.insertRow();
-    
-            // Insertamos las celdas con la información de cada mail
-            fila.insertCell().textContent = mail.numero;
-            fila.insertCell().textContent = mail.random1;
-            fila.insertCell().textContent = mail.tipo;
-            fila.insertCell().textContent = mail.random2;
-            fila.insertCell().textContent = mail.asesor;
-            fila.insertCell().textContent = mail.cantidaAsesores;
-            fila.insertCell().textContent = mail.asesoresXPaciente;
-            fila.insertCell().textContent = mail.asesoresXAsistio;
-            fila.insertCell().textContent = mail.asesoresXNuncaAsistio;
+            let row = tablaFilas.insertRow();
+            row.insertCell().textContent = fila.numero;
+            row.insertCell().textContent = fila.control.evento;
+            row.insertCell().textContent = fila.control.dia;
+            row.insertCell().textContent = fila.control.reloj;
+            row.insertCell().textContent = fila.proximaLlegada.random;
+            row.insertCell().textContent = fila.proximaLlegada.demora;
+            row.insertCell().textContent = fila.proximaLlegada.llegada;
+            row.insertCell().textContent = fila.peluqueroAsignado.random;
+            row.insertCell().textContent = fila.peluqueroAsignado.peluquero;
+            row.insertCell().textContent = fila.finAtencionAprendiz.random;
+            row.insertCell().textContent = fila.finAtencionAprendiz.demora;
+            row.insertCell().textContent = fila.finAtencionAprendiz.finAtencion;
+            row.insertCell().textContent = fila.finAtencionVeteranoA.random;
+            row.insertCell().textContent = fila.finAtencionVeteranoA.demora;
+            row.insertCell().textContent = fila.finAtencionVeteranoA.finAtencion;
+            row.insertCell().textContent = fila.finAtencionVeteranoB.random;
+            row.insertCell().textContent = fila.finAtencionVeteranoB.demora;
+            row.insertCell().textContent = fila.finAtencionVeteranoB.finAtencion;
+            row.insertCell().textContent = fila.aprendiz.estado;
+            row.insertCell().textContent = fila.aprendiz.cola;
+            row.insertCell().textContent = fila.aprendiz.clientesAtendidos;
+            row.insertCell().textContent = fila.veteranoA.estado;
+            row.insertCell().textContent = fila.veteranoA.cola;
+            row.insertCell().textContent = fila.veteranoA.clientesAtendidos;
+            row.insertCell().textContent = fila.veteranoB.estado;
+            row.insertCell().textContent = fila.veteranoB.cola;
+            row.insertCell().textContent = fila.veteranoB.clientesAtendidos;
+            row.insertCell().textContent = fila.recaudacion.gananciasDiarias;
+            row.insertCell().textContent = fila.recaudacion.gastosDiarios;
+            row.insertCell().textContent = fila.recaudacion.gananciasNetas;
+            row.insertCell().textContent = fila.recaudacion.promedioRecaudacion;
+            row.insertCell().textContent = fila.esperas.esperaSimultanea;
+            row.insertCell().textContent = fila.esperas.maxEsperaSimultanea;
+            row.insertCell().textContent = fila.clientes.length;
         });
 
 
