@@ -2,12 +2,11 @@ import "./Clases";
 import "./utils/Validaciones"
 import "./utils/GeneradorRandoms"
 import "./utils/Calculos"
-import { Aprendiz, Cliente, Control, Esperas, Evento, Fila, FinAtencionAprendiz, FinAtencionVeteranoA, FinAtencionVeteranoB, LlegadaCliente, Recaudacion, VeteranoA, VeteranoB } from "./Clases";
-import { calcularMomentoLlegada } from "./utils/Calculos";
-import { generarRandom } from "./utils/GeneradorRandoms";
-import { calcularProximaLlegada , asignarPeluquero, calcularFinAtencion} from "./Eventos/llegadaCliente";
+import { Aprendiz, Cliente, Control, Esperas, Fila, FinAtencionAprendiz, FinAtencionVeteranoA, FinAtencionVeteranoB, LlegadaCliente, Recaudacion, VeteranoA, VeteranoB } from "./Clases";
+import { calcularProximaLlegada , asignarPeluquero, calcularFinAtencion, ocuparPeluquero, generarNuevoCliente, aumentarColaPeluqueroAsignado} from "./Eventos/llegadaCliente";
 import { ocuparPeluquero } from "./EstadosPeluquero/ocupar";
 import { liberarPeluquero } from "./EstadosPeluquero/liberar";
+import {verificarFinAtencionPeluquero, controlarColaPeluquero, liberarPeluquero, sacarClienteDeEspera, actualizarFinAtencion, actualizarRecaudacion, reducirColaPeluquero, aumentarclientesAtendidosPeluquero} from "./Eventos/finAtencion"
 
 // Función para generar los datos con base en los datos del formulario
 function generarDatos(datosFormulario) {
@@ -25,12 +24,11 @@ function generarDatos(datosFormulario) {
         let numeroFila = 0;
         let ultimaFila = new Fila();
         let aperturaNegocio = true;
-        let Aprendiz = new Aprendiz("Libre",0,0);
-        let VeteranoA = new VeteranoA("Libre",0,0);
-        let VeteranoB = new VeteranoB("Libre",0,0);
+        let aprendiz = new Aprendiz("Libre",0,0);
+        let veteranoA = new VeteranoA("Libre",0,0);
+        let veteranoB = new VeteranoB("Libre",0,0);
         let esperas = new Esperas(0,0);
         let filasAMostrar = [Fila];
-        // estructura de la lista (nombre del evento, segundos)
         let controlEventos = [Control];
         let controlClientes = [Cliente];
         let proximaLlegada = new LlegadaCliente(0,0,0);
@@ -52,6 +50,7 @@ function generarDatos(datosFormulario) {
                 // Calculando y guardando la proxima llegada
                 calcularProximaLlegada(datosFormulario.LlegadaClientes[0], datosFormulario.LlegadaClientes[1], controlEventos, proximaLlegada);
                 aperturaNegocio = false;
+                reloj = 0;
             }
 
 
@@ -62,17 +61,17 @@ function generarDatos(datosFormulario) {
                 // Generando la asignacion del peluquero para el cliente que acaba de llegar
                 asignarPeluquero(peluqueroAsignado, datosFormulario.Aprendiz[0], datosFormulario.VeteranoA[0]);
                 // Verificando si el peluquero esta libre
-                if(verificarEstadoPeluquero(peluqueroAsignado, Aprendiz, VeteranoA, VeteranoB)){
+                if(verificarEstadoPeluquero(peluqueroAsignado, aprendiz, veteranoA, veteranoB)){
                     // Calcular Fin de Atencion del Peluquero
                     calcularFinAtencion(rndFinAtencion, reloj, demoraAtencion, finAtencion, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB);
-                    ocuparPeluquero(peluqueroAsignado, Aprendiz, VeteranoA, VeteranoB);
+                    ocuparPeluquero(peluqueroAsignado, aprendiz, veteranoA, veteranoB);
                 }
                 // Si el Peluquero Esta Ocupado
                 else{
                     // Generando Nuevo Cliente
                     generarNuevoCliente(controlClientes, esperas, peluqueroAsignado, reloj);
                     // Actualizando la cola del peluquero Asignado
-                    aumentarColaPeluqueroAsignado(peluqueroAsignado, Aprendiz, VeteranoA, VeteranoB);
+                    aumentarColaPeluqueroAsignado(peluqueroAsignado, aprendiz, veteranoA, veteranoB);
                     // Gestionando las Esperas
                     esperas.esperaSimultanea ++;
                     if (esperas.esperaSimultanea > esperas.maxEsperaSimultanea){
@@ -86,20 +85,21 @@ function generarDatos(datosFormulario) {
             if(controlEventos[0].evento = "Fin Atencion"){
                 verificarFinAtencionPeluquero(peluqueroFinAtencion, reloj, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB);
                 // Controlar cola de Peluquero que termino de Atender (si no tiene clientes en cola)
-                if(controlarColaPeluquero(peluqueroFinAtencion, Aprendiz, VeteranoA, VeteranoB)){
-                    liberarPeluquero(peluqueroFinAtencion, Aprendiz, VeteranoA, VeteranoB);
+                if(controlarColaPeluquero(peluqueroFinAtencion, aprendiz, veteranoA, veteranoB)){
+                    liberarPeluquero(peluqueroFinAtencion, aprendiz, veteranoA, veteranoB);
                 }
                 // si tiene clientes en cola
                 else{
                 // Calculando el Proximo Fin de Atencion para el nuevo cliente
                 calcularFinAtencion(rndFinAtencion, reloj, demoraAtencion, finAtencion, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB);
                 sacarClienteDeEspera(peluqueroFinAtencion,controlClientes);
+                actualizarFinAtencion(peluqueroFinAtencion, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, rndFinAtencion, demoraAtencion, finAtencion);
                 }
                 // actualizando datos de espera, recaudacion y del objeto peluquero 
                 esperas.esperaSimultanea --;
                 actualizarRecaudacion(peluqueroFinAtencion, recaudacion,"Ganancia",dia);
-                reducirColaPeluquero(peluqueroFinAtencion, Aprendiz, VeteranoA, VeteranoB);
-                aumentarclientesAtendidosPeluquero(peluqueroFinAtencion, Aprendiz, VeteranoA, VeteranoB);
+                reducirColaPeluquero(peluqueroFinAtencion, aprendiz, veteranoA, veteranoB);
+                aumentarclientesAtendidosPeluquero(peluqueroFinAtencion, aprendiz, veteranoA, veteranoB);
             }
 
             // Si la fila no es la primera quiere decir que ocurrio un evento 

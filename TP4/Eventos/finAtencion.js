@@ -1,3 +1,4 @@
+
 export const verificarFinAtencionPeluquero = (peluqueroFinAtencion, reloj, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB) =>{
     if(reloj == finAtencionAprendiz.finAtencion){
         peluqueroFinAtencion = "Aprendiz";
@@ -85,4 +86,22 @@ export const actualizarRecaudacion = (peluqueroFinAtencion, recaudacion, tipo, d
         recaudacion.gananciasNetas -= 1500;
     }
     recaudacion.promedioRecaudacion = gananciasNetas/dia;
+}
+
+export const actualizarFinAtencion = (peluqueroFinAtencion, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, random, demora, finAtencion) =>{
+    if(peluqueroFinAtencion == "Aprendiz"){
+        finAtencionAprendiz.random = random;
+        finAtencionAprendiz.demora = demora;
+        finAtencionAprendiz.finAtencion = finAtencion;
+    }
+    if(peluqueroFinAtencion == "Veterano A"){
+        finAtencionVeteranoA.random = random;
+        finAtencionVeteranoA.demora = demora;
+        finAtencionVeteranoA.finAtencion = finAtencion;
+    }
+    if(peluqueroFinAtencion == "Veterano B"){
+        finAtencionVeteranoB.random = random;
+        finAtencionVeteranoB.demora = demora;
+        finAtencionVeteranoB.finAtencion = finAtencion;
+    }
 }
