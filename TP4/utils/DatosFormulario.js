@@ -1,6 +1,6 @@
-import "../Clases"
+import {DatosFormulario} from "../Clases"
 // Obtener los valores de los inputs y crear un objeto de la clase DatosFormulario
-function obtenerDatosFormulario() {
+export function obtenerDatosFormulario() {
     const tiempo = parseInt(document.getElementById('tiempo').value);
     const aprendiz = [
         parseFloat(document.getElementById('probabilidadAprendiz').value),
@@ -32,7 +32,7 @@ function obtenerDatosFormulario() {
     return datosFormulario;
 }
 
-const limpiarFormulario = () => {
+export const limpiarFormulario = () => {
     // Obtén todos los elementos de input del formulario
     const inputs = document.querySelectorAll('input');
 
