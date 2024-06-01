@@ -47,37 +47,37 @@ function generarDatos(datosFormulario) {
             numeroFila ++;
             reloj = reloj + (controlEventos[0].reloj - reloj);
 
+            // Si recien Abre el negocio 
+            if(aperturaNegocio){
+                // Calculando y guardando la proxima llegada
+                calcularProximaLlegada(datosFormulario.LlegadaClientes[0], datosFormulario.LlegadaClientes[1], controlEventos, proximaLlegada);
+                aperturaNegocio = false;
+            }
+
+
             // Evento Llegada de Cliente
-            if(controlEventos[0].evento = "llegada Cliente" || aperturaNegocio){
+            if(controlEventos[0].evento = "llegada Cliente"){
                 // Calculando y guardando la proxima llegada
                 calcularProximaLlegada(datosFormulario.LlegadaClientes[0], datosFormulario.LlegadaClientes[1], controlEventos, proximaLlegada);
                 // Generando la asignacion del peluquero para el cliente que acaba de llegar
-                if(controlEventos[0].evento = "llegada Cliente"){
-                    asignarPeluquero(peluqueroAsignado, datosFormulario.Aprendiz[0], datosFormulario.VeteranoA[0]);
-                    // Verificando si el peluquero esta libre
-                    if(verificarEstadoPeluquero(peluqueroAsignado, Aprendiz, VeteranoA, VeteranoB)){
-                        // Calcular Fin de Atencion del Peluquero
-                        calcularFinAtencion(rndFinAtencion, reloj, demoraAtencion, finAtencion, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB);
-                        ocuparPeluquero(peluqueroAsignado, Aprendiz, VeteranoA, VeteranoB);
-                    }
-                    // Si el Peluquero Esta Ocupado
-                    else{
-                        // Generando Nuevo Cliente
-                        generarNuevoCliente(controlClientes, esperas, peluqueroAsignado, reloj);
-                        // Actualizando la cola del peluquero Asignado
-                        aumentarColaPeluqueroAsignado(peluqueroAsignado, Aprendiz, VeteranoA, VeteranoB);
-                        // Gestionando las Esperas
-                        esperas.esperaSimultanea ++;
-                        if (esperas.esperaSimultanea > esperas.maxEsperaSimultanea){
-                            esperas.maxEsperaSimultanea = esperas.esperaSimultanea
-                        }
-                    }
+                asignarPeluquero(peluqueroAsignado, datosFormulario.Aprendiz[0], datosFormulario.VeteranoA[0]);
+                // Verificando si el peluquero esta libre
+                if(verificarEstadoPeluquero(peluqueroAsignado, Aprendiz, VeteranoA, VeteranoB)){
+                    // Calcular Fin de Atencion del Peluquero
+                    calcularFinAtencion(rndFinAtencion, reloj, demoraAtencion, finAtencion, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB);
+                    ocuparPeluquero(peluqueroAsignado, Aprendiz, VeteranoA, VeteranoB);
                 }
-                // Si recien Abre el negocio 
-                if(aperturaNegocio){
-                    // Calculando y guardando la proxima llegada
-                    calcularProximaLlegada(datosFormulario.LlegadaClientes[0], datosFormulario.LlegadaClientes[1], controlEventos, proximaLlegada);
-                    aperturaNegocio = false;
+                // Si el Peluquero Esta Ocupado
+                else{
+                    // Generando Nuevo Cliente
+                    generarNuevoCliente(controlClientes, esperas, peluqueroAsignado, reloj);
+                    // Actualizando la cola del peluquero Asignado
+                    aumentarColaPeluqueroAsignado(peluqueroAsignado, Aprendiz, VeteranoA, VeteranoB);
+                    // Gestionando las Esperas
+                    esperas.esperaSimultanea ++;
+                    if (esperas.esperaSimultanea > esperas.maxEsperaSimultanea){
+                        esperas.maxEsperaSimultanea = esperas.esperaSimultanea
+                    }
                 }
                 peluqueroAsignado = "";
             }
