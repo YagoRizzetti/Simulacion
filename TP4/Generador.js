@@ -1,7 +1,7 @@
 import "./Clases";
-import "./utils/Validaciones"
+import {validarDatos} from "./utils/Validaciones"
 import "./utils/GeneradorRandoms"
-import "./utils/Calculos"
+import {eliminarProximasllegada} from "./utils/Calculos"
 import { Aprendiz, AsignacionPeluquero, Cliente, Control, Esperas, Fila, FinAtencionAprendiz, FinAtencionVeteranoA, FinAtencionVeteranoB, LlegadaCliente, Recaudacion, VeteranoA, VeteranoB } from "./Clases";
 import { calcularProximaLlegada , asignarPeluquero, calcularFinAtencion, ocuparPeluquero, generarNuevoCliente, aumentarColaPeluqueroAsignado} from "./Eventos/llegadaCliente";
 import { ocuparPeluquero } from "./EstadosPeluquero/ocupar";
@@ -24,6 +24,7 @@ function generarDatos(datosFormulario) {
         let numeroFila = 0;
         let ultimaFila = new Fila(0,Control,LlegadaCliente,AsignacionPeluquero,FinAtencionAprendiz,FinAtencionVeteranoA,FinAtencionVeteranoB,Aprendiz,VeteranoA,VeteranoB,Recaudacion,Esperas,[Cliente]);
         let aperturaNegocio = true;
+        let finJornada = false;
         let aprendiz = new Aprendiz("Libre",0,0);
         let veteranoA = new VeteranoA("Libre",0,0);
         let veteranoB = new VeteranoB("Libre",0,0);
@@ -45,6 +46,15 @@ function generarDatos(datosFormulario) {
             numeroFila ++;
             reloj = reloj + (controlEventos[0].reloj - reloj);
 
+            // Controlar si ya se Termino la jornada del dia
+            if(reloj >= 60*60*8){
+                finJornada = true;
+                proximaLlegada.random = null;
+                proximaLlegada.demora = null;
+                proximaLlegada.llegada = null;
+                eliminarProximasllegada(controlEventos);
+            }
+
             // Si recien Abre el negocio 
             if(aperturaNegocio){
                 // Calculando y guardando la proxima llegada
@@ -56,7 +66,7 @@ function generarDatos(datosFormulario) {
             // Controlando si algun Cliente supero los 30 minutos de espera y necesita un refresco
 
             // Evento Llegada de Cliente
-            if(controlEventos[0].evento = "llegada Cliente"){
+            if(controlEventos[0].evento = "llegada Cliente" && !finJornada){
                 // Calculando y guardando la proxima llegada
                 calcularProximaLlegada(datosFormulario.LlegadaClientes[0], datosFormulario.LlegadaClientes[1], controlEventos, proximaLlegada, dia);
                 // Generando la asignacion del peluquero para el cliente que acaba de llegar

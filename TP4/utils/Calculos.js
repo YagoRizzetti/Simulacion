@@ -56,3 +56,7 @@ export const aumentarColaPeluqueroAsignado = (peluqueroAsignado, aprendiz, veter
         veteranoB.cola ++;
     }
 }
+
+export const eliminarProximasllegada = (controlEventos) => {
+    controlEventos = controlEventos.filter(evento => evento.evento !== "Llegada Cliente");
+};
