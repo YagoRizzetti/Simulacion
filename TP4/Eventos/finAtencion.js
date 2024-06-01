@@ -70,15 +70,15 @@ export const sacarClienteDeEspera = (peluqueroFinAtencion, controlClientes) => {
     }
 }
 
-export const actualizarRecaudacion = (peluqueroFinAtencion, recaudacion, tipo, dia) =>{
+export const actualizarRecaudacion = (peluqueroFinAtencion, recaudacion, tipo, dia, controlClientes) =>{
     if(tipo == "Ganancia"){
         if(peluqueroFinAtencion == "Aprendiz"){
             recaudacion.gananciasDiarias += 1800;
             recaudacion.gananciasNetas += 1800;
         }
         if(peluqueroFinAtencion == "Veterano A" || peluqueroFinAtencion == "Veterano B"){
-            recaudacion.gananciasDiarias += 2500;
-            recaudacion.gananciasNetas += 2500;
+            recaudacion.gananciasDiarias += 3500;
+            recaudacion.gananciasNetas += 3500;
         }
     }
     else{

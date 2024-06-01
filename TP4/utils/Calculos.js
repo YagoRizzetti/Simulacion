@@ -1,3 +1,5 @@
+import { actualizarRecaudacion } from "../Eventos/finAtencion";
+
 const calcularUniforme = (rnd, a, b) =>{
     resultado = a + rnd*(b-a);
     return resultado;
@@ -60,3 +62,12 @@ export const aumentarColaPeluqueroAsignado = (peluqueroAsignado, aprendiz, veter
 export const eliminarProximasllegada = (controlEventos) => {
     controlEventos = controlEventos.filter(evento => evento.evento !== "Llegada Cliente");
 };
+
+export const controlarRefrescoCliente = (reloj, controlClientes, recaudacion, dia) =>{
+    for (cliente of controlClientes){
+        if(reloj >= cliente.momentoRefresco && !cliente.refresco){
+            actualizarRecaudacion("",recaudacion, "Gasto", dia);
+            cliente.refresco = true;
+        }
+    }
+}

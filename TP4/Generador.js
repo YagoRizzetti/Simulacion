@@ -66,6 +66,7 @@ function generarDatos(datosFormulario) {
             }
 
             // Controlando si algun Cliente supero los 30 minutos de espera y necesita un refresco
+            controlarRefrescoCliente(reloj, controlClientes, recaudacion, dia)
 
             // Evento Llegada de Cliente
             if(controlEventos[0].evento = "llegada Cliente" && !finJornada){
