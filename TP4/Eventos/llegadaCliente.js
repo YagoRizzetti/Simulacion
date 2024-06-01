@@ -1,8 +1,8 @@
-import {Cliente, Control} from "../Clases"
+import {Cliente, Control, LlegadaCliente} from "../Clases"
 import { calcularMomentoRefresco, seleccionarPeluquero } from "../utils/Calculos";
 import { generarRandom } from "../utils/GeneradorRandoms";
 
-export const calcularProximaLlegada = (uniformaALlegada, uniformeBLlegada, controlEventos, proximaLlegada) =>{
+export const calcularProximaLlegada = (uniformaALlegada, uniformeBLlegada, controlEventos, proximaLlegada, dia) =>{
     let rndllegada = generarRandom();
     let demora = calcularDemoraLlegada(rndllegada, uniformaALlegada, uniformeBLlegada)
     let momentoLlegada = reloj + demora;
@@ -17,7 +17,7 @@ export const asignarPeluquero = (peluqueroAsignado, probabilidadAprendiz, probab
     peluqueroAsignado = seleccionarPeluquero(rndAsignacion, probabilidadAprendiz, probabilidadVeteranoA);
 }
 
-export const calcularFinAtencion = (rndFinAtencion, reloj, peluquero, demoraAtencion, finAtencion ,distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB) =>{
+export const calcularFinAtencion = (rndFinAtencion, reloj, peluquero, demoraAtencion, finAtencion ,distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, controlEventos, dia) =>{
     rndFinAtencion = generarRandom();
     if(peluquero == "Aprendiz"){
         demoraAtencion = calcularUniforme(rndFinAtencion, distribucionAprendiz[0], distribucionAprendiz[1]);
@@ -34,6 +34,9 @@ export const calcularFinAtencion = (rndFinAtencion, reloj, peluquero, demoraAten
         finAtencion = reloj + demoraAtencion;
         finAtencionVeteranoB.random, finAtencionVeteranoB.demora, finAtencionVeteranoB.finAtencion = rndFinAtencion,demoraAtencion,finAtencion;
     }
+    let control = new Control("Fin Atencion", dia, finAtencion);
+    controlEventos.push(control);
+    controlEventos.sort((a, b) => a.reloj - b.reloj);
 }
 
 export const generarNuevoCliente = (controlClientes, esperas, peluqueroAsignado, reloj) =>{

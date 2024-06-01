@@ -1,28 +1,28 @@
 const calcularUniforme = (rnd, a, b) =>{
-    resultado = a + rnd*(b-a)
-    return resultado
+    resultado = a + rnd*(b-a);
+    return resultado;
 }
 
 
 export const calcularDemoraLlegada = (rndllegada, a , b) =>{
-    demora = calcularUniforme(rndllegada, a, b)
-    return demora
+    demora = calcularUniforme(rndllegada, a, b);
+    return demora;
 }
 
 export const seleccionarPeluquero = (rnd, probabilidadAprendiz, probabilidadVeteranoA) =>{
-    probabilidadVeteranoA = probabilidadAprendiz + probabilidadVeteranoA
-    let peluquero = ""
+    probabilidadVeteranoA = probabilidadAprendiz + probabilidadVeteranoA;
+    let peluquero = "";
     if(rnd < probabilidadAprendiz){
-        peluquero = "Aprendiz"
+        peluquero = "Aprendiz";
     } 
     if(rnd < probabilidadVeteranoA){
-        peluquero = "Veterano A"
+        peluquero = "Veterano A";
     }
     else{
-        peluquero = "Veterano B"
+        peluquero = "Veterano B";
     }
 
-    return peluquero
+    return peluquero;
 }
 
 export const verificarEstadoPeluquero = (peluqueroAsignado, aprendiz, veteranoA, veteranoB) =>{

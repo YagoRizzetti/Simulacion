@@ -2,7 +2,7 @@ import "./Clases";
 import "./utils/Validaciones"
 import "./utils/GeneradorRandoms"
 import "./utils/Calculos"
-import { Aprendiz, Cliente, Control, Esperas, Fila, FinAtencionAprendiz, FinAtencionVeteranoA, FinAtencionVeteranoB, LlegadaCliente, Recaudacion, VeteranoA, VeteranoB } from "./Clases";
+import { Aprendiz, AsignacionPeluquero, Cliente, Control, Esperas, Fila, FinAtencionAprendiz, FinAtencionVeteranoA, FinAtencionVeteranoB, LlegadaCliente, Recaudacion, VeteranoA, VeteranoB } from "./Clases";
 import { calcularProximaLlegada , asignarPeluquero, calcularFinAtencion, ocuparPeluquero, generarNuevoCliente, aumentarColaPeluqueroAsignado} from "./Eventos/llegadaCliente";
 import { ocuparPeluquero } from "./EstadosPeluquero/ocupar";
 import { liberarPeluquero } from "./EstadosPeluquero/liberar";
@@ -22,7 +22,7 @@ function generarDatos(datosFormulario) {
         let dia = 0;
         let reloj = 0;
         let numeroFila = 0;
-        let ultimaFila = new Fila();
+        let ultimaFila = new Fila(0,Control,LlegadaCliente,AsignacionPeluquero,FinAtencionAprendiz,FinAtencionVeteranoA,FinAtencionVeteranoB,Aprendiz,VeteranoA,VeteranoB,Recaudacion,Esperas,[Cliente]);
         let aperturaNegocio = true;
         let aprendiz = new Aprendiz("Libre",0,0);
         let veteranoA = new VeteranoA("Libre",0,0);
@@ -36,7 +36,7 @@ function generarDatos(datosFormulario) {
         let finAtencionVeteranoA = new FinAtencionVeteranoA(0,0,0);
         let finAtencionVeteranoB = new FinAtencionVeteranoB(0,0,0);
         let recaudacion = new Recaudacion(0,0,0,0);
-        let peluqueroAsignado = "";
+        let peluqueroAsignado = new AsignacionPeluquero(null,"");
         let peluqueroFinAtencion = "";
         let demoraAtencion = 0;
         let finAtencion = 0;
@@ -48,37 +48,39 @@ function generarDatos(datosFormulario) {
             // Si recien Abre el negocio 
             if(aperturaNegocio){
                 // Calculando y guardando la proxima llegada
-                calcularProximaLlegada(datosFormulario.LlegadaClientes[0], datosFormulario.LlegadaClientes[1], controlEventos, proximaLlegada);
+                calcularProximaLlegada(datosFormulario.LlegadaClientes[0], datosFormulario.LlegadaClientes[1], controlEventos, proximaLlegada, dia);
                 aperturaNegocio = false;
                 reloj = 0;
             }
 
+            // Controlando si algun Cliente supero los 30 minutos de espera y necesita un refresco
 
             // Evento Llegada de Cliente
             if(controlEventos[0].evento = "llegada Cliente"){
                 // Calculando y guardando la proxima llegada
-                calcularProximaLlegada(datosFormulario.LlegadaClientes[0], datosFormulario.LlegadaClientes[1], controlEventos, proximaLlegada);
+                calcularProximaLlegada(datosFormulario.LlegadaClientes[0], datosFormulario.LlegadaClientes[1], controlEventos, proximaLlegada, dia);
                 // Generando la asignacion del peluquero para el cliente que acaba de llegar
                 asignarPeluquero(peluqueroAsignado, datosFormulario.Aprendiz[0], datosFormulario.VeteranoA[0]);
                 // Verificando si el peluquero esta libre
-                if(verificarEstadoPeluquero(peluqueroAsignado, aprendiz, veteranoA, veteranoB)){
+                if(verificarEstadoPeluquero(peluqueroAsignado.peluquero, aprendiz, veteranoA, veteranoB)){
                     // Calcular Fin de Atencion del Peluquero
-                    calcularFinAtencion(rndFinAtencion, reloj, demoraAtencion, finAtencion, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB);
-                    ocuparPeluquero(peluqueroAsignado, aprendiz, veteranoA, veteranoB);
+                    calcularFinAtencion(rndFinAtencion, reloj, demoraAtencion, finAtencion, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, controlEventos, dia);
+                    ocuparPeluquero(peluqueroAsignado.peluquero, aprendiz, veteranoA, veteranoB);
                 }
                 // Si el Peluquero Esta Ocupado
                 else{
                     // Generando Nuevo Cliente
-                    generarNuevoCliente(controlClientes, esperas, peluqueroAsignado, reloj);
+                    generarNuevoCliente(controlClientes, esperas, peluqueroAsignado.peluquero, reloj);
                     // Actualizando la cola del peluquero Asignado
-                    aumentarColaPeluqueroAsignado(peluqueroAsignado, aprendiz, veteranoA, veteranoB);
+                    aumentarColaPeluqueroAsignado(peluqueroAsignado.peluquero, aprendiz, veteranoA, veteranoB);
                     // Gestionando las Esperas
                     esperas.esperaSimultanea ++;
                     if (esperas.esperaSimultanea > esperas.maxEsperaSimultanea){
                         esperas.maxEsperaSimultanea = esperas.esperaSimultanea
                     }
                 }
-                peluqueroAsignado = "";
+                peluqueroAsignado.random = null;
+                peluqueroAsignado.peluquero = "";
             }
             
             // Evento Fin de Atencion
@@ -87,11 +89,13 @@ function generarDatos(datosFormulario) {
                 // Controlar cola de Peluquero que termino de Atender (si no tiene clientes en cola)
                 if(controlarColaPeluquero(peluqueroFinAtencion, aprendiz, veteranoA, veteranoB)){
                     liberarPeluquero(peluqueroFinAtencion, aprendiz, veteranoA, veteranoB);
+                    actualizarFinAtencion(peluqueroFinAtencion, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, null, null, null);
+
                 }
                 // si tiene clientes en cola
                 else{
                 // Calculando el Proximo Fin de Atencion para el nuevo cliente
-                calcularFinAtencion(rndFinAtencion, reloj, demoraAtencion, finAtencion, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB);
+                calcularFinAtencion(rndFinAtencion, reloj, demoraAtencion, finAtencion, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, controlEventos, dia);
                 sacarClienteDeEspera(peluqueroFinAtencion,controlClientes);
                 actualizarFinAtencion(peluqueroFinAtencion, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, rndFinAtencion, demoraAtencion, finAtencion);
                 }
@@ -102,19 +106,25 @@ function generarDatos(datosFormulario) {
                 aumentarclientesAtendidosPeluquero(peluqueroFinAtencion, aprendiz, veteranoA, veteranoB);
             }
 
-            // Si la fila no es la primera quiere decir que ocurrio un evento 
-            if(numeroFila != 1){
-                controlEventos.shift();                
-            }
+
+
+            let fila = new Fila(numeroFila,controlEventos[0],proximaLlegada,peluqueroAsignado,finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB,aprendiz,veteranoA,veteranoB,recaudacion,esperas,controlClientes);
             
-            if ((numeroFila >= datosFormulario.rango[0] && numeroFila <= datosFormulario.rango[1]) || ultimaFila) {
-                const fila = new Fila();
+            if (numeroFila >= datosFormulario.rango[0] && numeroFila <= datosFormulario.rango[1]) {
                 filasAMostrar.push(fila);
                 console.log("Fila agregado:", fila);
             } else {
                 console.log("Fila no agregado.");
             }
+            ultimaFila = fila;
+
+            // Si la fila no es la primera del dia quiere decir que ocurrio un evento 
+            if(!aperturaNegocio){
+                controlEventos.shift();                
+            }
+
         } 
+        filasAMostrar.push(ultimaFila);
 
         let tablaMails = document.querySelector('.tbody');
 
@@ -122,7 +132,7 @@ function generarDatos(datosFormulario) {
         tablaMails.innerHTML = '';
     
         // Iteramos sobre la lista de mails y creamos las filas de la tabla
-        datosMails.forEach(mail => {
+        filasAMostrar.forEach(fila => {
             let fila = tablaMails.insertRow();
     
             // Insertamos las celdas con la información de cada mail
