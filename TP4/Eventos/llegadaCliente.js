@@ -8,7 +8,7 @@ export const calcularProximaLlegada = (uniformaALlegada, uniformeBLlegada, contr
     let momentoLlegada = reloj + demora;
     let control = new Control("llegada Cliente", dia, momentoLlegada);
     controlEventos.push(control);
-    controlEventos.sort();
+    controlEventos.sort((a, b) => a.reloj - b.reloj);
     proximaLlegada.random, proximaLlegada.demora, proximaLlegada.llegada = rndllegada, demora, momentoLlegada;
 }
 

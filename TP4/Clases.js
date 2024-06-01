@@ -106,8 +106,8 @@ export class VeteranoB extends ObjetosPermanentes{
 
 export class Recaudacion{
     constructor(ganancias, gastos, gananciasNetas, promRecaudacion){
-        this.ganancias = ganancias;
-        this.gastos = gastos;
+        this.gananciasDiarias = ganancias;
+        this.gastosDiarios = gastos;
         this.gananciasNetas = gananciasNetas;
         this.promedioRecaudacion = promRecaudacion;
     }

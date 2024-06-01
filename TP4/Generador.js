@@ -23,6 +23,7 @@ function generarDatos(datosFormulario) {
         let dia = 0;
         let reloj = 0;
         let numeroFila = 0;
+        let ultimaFila = false;
         let Aprendiz = new Aprendiz("Libre",0,0);
         let VeteranoA = new VeteranoA("Libre",0,0);
         let VeteranoB = new VeteranoB("Libre",0,0);
@@ -41,7 +42,7 @@ function generarDatos(datosFormulario) {
         let demoraAtencion = 0;
         let finAtencion = 0;
         let rndFinAtencion = 0;
-        while (dia < dias || numeroFila <= 100000) {
+        while (dia < dias && numeroFila <= 100000) {
             numeroFila ++;
             reloj = reloj + (controlEventos[0].reloj - reloj);
             // Evento Llegada de Cliente
@@ -79,46 +80,27 @@ function generarDatos(datosFormulario) {
                 if(controlarColaPeluquero(peluqueroFinAtencion, Aprendiz, VeteranoA, VeteranoB)){
                     liberarPeluquero(peluqueroFinAtencion, Aprendiz, VeteranoA, VeteranoB);
                 }
+                else{
+                // Calculando el Proximo Fin de Atencion para el nuevo cliente
+                calcularFinAtencion(rndFinAtencion, reloj, demoraAtencion, finAtencion, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB);
+                }
+                // actualizando datos de espera, recaudacion y del objeto peluquero 
                 esperas.esperaSimultanea --;
                 sacarClienteDeEspera(peluqueroFinAtencion,controlClientes);
-                actualizarRecaudacion(peluqueroFinAtencion, Aprendiz, VeteranoA, VeteranoB, recaudacion);
+                actualizarRecaudacion(peluqueroFinAtencion, recaudacion,"Ganancia",dia);
                 reducirColaPeluquero(peluqueroFinAtencion, Aprendiz, VeteranoA, VeteranoB);
                 aumentarclientesAtendidosPeluquero(peluqueroFinAtencion, Aprendiz, VeteranoA, VeteranoB);
             }
-            controlEventos.pop(controlEventos[0]);
-            let rnd2 = generarRandom();
-            console.log(rnd1);
-            console.log(rnd2);
-            let tipo = calcularTipo(rnd1, datosFormulario.tipos);
-            let asesor = calcularAsesor(rnd2, datosFormulario.asesor, tipo);
-            let cantidad = ultimoMail.cantidaAsesores;
-            let asesoresXPaciente = ultimoMail.asesoresXPaciente;
-            let asesoresXAsistio = ultimoMail.asesoresXAsistio;
-            let asesoresXNuncaAsistio = ultimoMail.asesoresXNuncaAsistio;
-            if (asesor == "si") {
-                cantidad = cantidad + 1;
-                if(tipo == "Paciente"){
-                    asesoresXPaciente ++;
-                }
-                if(tipo == "Asistio a la clinica"){
-                    asesoresXAsistio ++;
-                }
-                if(tipo == "Nunca Asistio a la clinica"){
-                    asesoresXNuncaAsistio ++;
-                }
-            }
-            const mail = new Mail(cont, rnd1, tipo, rnd2, asesor, cantidad, asesoresXPaciente, asesoresXAsistio, asesoresXNuncaAsistio);
+            controlEventos.shift();
             
-            if ((cont >= datosFormulario.rango[0] && cont <= datosFormulario.rango[1]) || cont == datosFormulario.tamaño) {
-                datosMails.push(mail);
-                console.log("Mail agregado:", mail);
+            if ((numeroFila >= datosFormulario.rango[0] && numeroFila <= datosFormulario.rango[1]) || ultimaFila) {
+                const fila = new Fila();
+                filasAMostrar.push(fila);
+                console.log("Fila agregado:", fila);
             } else {
-                console.log("Mail no agregado.");
+                console.log("Fila no agregado.");
             }
-
-            ultimoMail = mail;
         } 
-        console.log(datosMails)
 
         let tablaMails = document.querySelector('.tbody');
 
