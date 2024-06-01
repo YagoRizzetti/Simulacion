@@ -21,6 +21,7 @@ function generarDatos(datosFormulario) {
         const dias = datosFormulario.tiempo;
         let dia = 0;
         let reloj = 0;
+        const duracionJornada = 60 * 60 * 8;
         let numeroFila = 0;
         let ultimaFila = new Fila(0,Control,LlegadaCliente,AsignacionPeluquero,FinAtencionAprendiz,FinAtencionVeteranoA,FinAtencionVeteranoB,Aprendiz,VeteranoA,VeteranoB,Recaudacion,Esperas,[Cliente]);
         let aperturaNegocio = true;
@@ -43,11 +44,12 @@ function generarDatos(datosFormulario) {
         let finAtencion = 0;
         let rndFinAtencion = 0;
         while (dia < dias && numeroFila <= 100000) {
-            numeroFila ++;
-            reloj = reloj + (controlEventos[0].reloj - reloj);
+            if (dia >= dias) break;
 
+            numeroFila++;
+            reloj = controlEventos.length > 0 ? reloj + (controlEventos[0].reloj - reloj): reloj;
             // Controlar si ya se Termino la jornada del dia
-            if(reloj >= 60*60*8){
+            if(reloj >= duracionJornada){
                 finJornada = true;
                 proximaLlegada.random = null;
                 proximaLlegada.demora = null;
@@ -133,6 +135,19 @@ function generarDatos(datosFormulario) {
                 controlEventos.shift();                
             }
 
+            // Controlar fin de la jornada y avanzar al siguiente día si es necesario
+            if (finJornada && controlEventos.length === 0 && !controlClientes.some(cliente => cliente.estado === "")) {
+                dia++;
+                reloj = 0;
+                aperturaNegocio = true;
+                finJornada = false;
+                aprendiz.estado = "Libre";
+                veteranoA.estado = "Libre";
+                veteranoB.estado = "Libre";
+                controlEventos = [];
+                controlClientes = [];
+                console.log(`Iniciando el día ${dia}`);
+            }
         } 
         filasAMostrar.push(ultimaFila);
 
