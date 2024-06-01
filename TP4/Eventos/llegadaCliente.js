@@ -39,16 +39,16 @@ export const calcularFinAtencion = (rndFinAtencion, reloj, peluquero, demoraAten
 export const generarNuevoCliente = (controlClientes, esperas, peluqueroAsignado, reloj) =>{
     let clienteCreado = new Cliente();
     if(length.controlClientes = 0){
-        clienteCreado = (1, "En Espera", peluqueroAsignado, calcularMomentoRefresco(reloj), false);
+        clienteCreado = (1, "En Espera", peluqueroAsignado, calcularMomentoRefresco(reloj), "No");
     }
     if(length.controlClientes = esperas.maxEsperaSimultanea){
         let numero = esperas.maxEsperaSimultanea + 1;
-        clienteCreado = (numero, "En Espera", peluqueroAsignado, calcularMomentoRefresco(reloj), false);
+        clienteCreado = (numero, "En Espera", peluqueroAsignado, calcularMomentoRefresco(reloj), "No");
     }
     if(length.controlClientes < esperas.esperaSimultanea){
         for(let cliente in controlClientes){
             if(cliente.estado == ""){
-                clienteCreado = (cliente.numero, "En Espera", peluqueroAsignado, calcularMomentoRefresco(reloj), false);
+                clienteCreado = (cliente.numero, "En Espera", peluqueroAsignado, calcularMomentoRefresco(reloj), "No");
             } 
         }
     }

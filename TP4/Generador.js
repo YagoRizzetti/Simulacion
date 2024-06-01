@@ -23,7 +23,8 @@ function generarDatos(datosFormulario) {
         let dia = 0;
         let reloj = 0;
         let numeroFila = 0;
-        let ultimaFila = false;
+        let ultimaFila = new Fila();
+        let aperturaNegocio = true;
         let Aprendiz = new Aprendiz("Libre",0,0);
         let VeteranoA = new VeteranoA("Libre",0,0);
         let VeteranoB = new VeteranoB("Libre",0,0);
@@ -31,7 +32,7 @@ function generarDatos(datosFormulario) {
         let filasAMostrar = [Fila];
         // estructura de la lista (nombre del evento, segundos)
         let controlEventos = [Control];
-        let controlClientes = [0, Cliente];
+        let controlClientes = [Cliente];
         let proximaLlegada = new LlegadaCliente(0,0,0);
         let finAtencionAprendiz = new FinAtencionAprendiz(0,0,0);
         let finAtencionVeteranoA = new FinAtencionVeteranoA(0,0,0);
@@ -45,8 +46,9 @@ function generarDatos(datosFormulario) {
         while (dia < dias && numeroFila <= 100000) {
             numeroFila ++;
             reloj = reloj + (controlEventos[0].reloj - reloj);
+
             // Evento Llegada de Cliente
-            if(controlEventos[0].evento = "llegada Cliente" || numeroFila == 1){
+            if(controlEventos[0].evento = "llegada Cliente" || aperturaNegocio){
                 // Calculando y guardando la proxima llegada
                 calcularProximaLlegada(datosFormulario.LlegadaClientes[0], datosFormulario.LlegadaClientes[1], controlEventos, proximaLlegada);
                 // Generando la asignacion del peluquero para el cliente que acaba de llegar
@@ -71,8 +73,15 @@ function generarDatos(datosFormulario) {
                         }
                     }
                 }
+                // Si recien Abre el negocio 
+                if(aperturaNegocio){
+                    // Calculando y guardando la proxima llegada
+                    calcularProximaLlegada(datosFormulario.LlegadaClientes[0], datosFormulario.LlegadaClientes[1], controlEventos, proximaLlegada);
+                    aperturaNegocio = false;
+                }
                 peluqueroAsignado = "";
             }
+            
             // Evento Fin de Atencion
             if(controlEventos[0].evento = "Fin Atencion"){
                 verificarFinAtencionPeluquero(peluqueroFinAtencion, reloj, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB);
@@ -80,18 +89,23 @@ function generarDatos(datosFormulario) {
                 if(controlarColaPeluquero(peluqueroFinAtencion, Aprendiz, VeteranoA, VeteranoB)){
                     liberarPeluquero(peluqueroFinAtencion, Aprendiz, VeteranoA, VeteranoB);
                 }
+                // si tiene clientes en cola
                 else{
                 // Calculando el Proximo Fin de Atencion para el nuevo cliente
                 calcularFinAtencion(rndFinAtencion, reloj, demoraAtencion, finAtencion, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB);
+                sacarClienteDeEspera(peluqueroFinAtencion,controlClientes);
                 }
                 // actualizando datos de espera, recaudacion y del objeto peluquero 
                 esperas.esperaSimultanea --;
-                sacarClienteDeEspera(peluqueroFinAtencion,controlClientes);
                 actualizarRecaudacion(peluqueroFinAtencion, recaudacion,"Ganancia",dia);
                 reducirColaPeluquero(peluqueroFinAtencion, Aprendiz, VeteranoA, VeteranoB);
                 aumentarclientesAtendidosPeluquero(peluqueroFinAtencion, Aprendiz, VeteranoA, VeteranoB);
             }
-            controlEventos.shift();
+
+            // Si la fila no es la primera quiere decir que ocurrio un evento 
+            if(numeroFila != 1){
+                controlEventos.shift();                
+            }
             
             if ((numeroFila >= datosFormulario.rango[0] && numeroFila <= datosFormulario.rango[1]) || ultimaFila) {
                 const fila = new Fila();

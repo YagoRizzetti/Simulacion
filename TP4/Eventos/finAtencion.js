@@ -46,20 +46,26 @@ export const aumentarclientesAtendidosPeluquero = (peluqueroFinAtencion, aprendi
     }
 }
 
-export const sacarClienteDeEspera = (peluqueroFinAtencion, controlClientes) =>{
-    posicionCLienteAEliminar = 0;
-    momentoRefrescoMasCerca = 0;
-    for(cliente in controlClientes){
-        if(cliente.peluquero == peluqueroFinAtencion){
-            if(momentoRefrescoMasCerca = 0){
+export const sacarClienteDeEspera = (peluqueroFinAtencion, controlClientes) => {
+    let posicionClienteAEliminar = -1;
+    let momentoRefrescoMasCerca = Infinity;  // Inicializar con un valor alto
+    let posicionActual = 0;
+
+    for (let cliente of controlClientes) {
+        if (cliente.peluquero === peluqueroFinAtencion) {
+            if (cliente.momentoRefresco < momentoRefrescoMasCerca) {
                 momentoRefrescoMasCerca = cliente.momentoRefresco;
-            }
-            else{
-                if(cliente.momentoRefresco < momentoRefrescoMasCerca){
-                    momentoRefrescoMasCerca = cliente.momentoRefresco;
-                }
+                posicionClienteAEliminar = posicionActual;
             }
         }
+        posicionActual++;
+    }
+
+    if (posicionClienteAEliminar !== -1) {
+        controlClientes[posicionClienteAEliminar].estado = "";
+        controlClientes[posicionClienteAEliminar].peluquero = "";
+        controlClientes[posicionClienteAEliminar].momentoRefresco = 0;
+        controlClientes[posicionClienteAEliminar].refresco = "";
     }
 }
 
