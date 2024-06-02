@@ -1,16 +1,14 @@
-import "./Clases";
-import {validarDatos} from "./utils/Validaciones"
-import "./utils/GeneradorRandoms"
-import {eliminarProximasllegada, calcularRelojAMostrar} from "./utils/Calculos"
-import { Aprendiz, AsignacionPeluquero, Cliente, Control, Esperas, Fila, FinAtencionAprendiz, FinAtencionVeteranoA, FinAtencionVeteranoB, LlegadaCliente, Recaudacion, VeteranoA, VeteranoB } from "./Clases";
-import { calcularProximaLlegada , asignarPeluquero, calcularFinAtencion, ocuparPeluquero, generarNuevoCliente, aumentarColaPeluqueroAsignado} from "./Eventos/llegadaCliente";
-import { ocuparPeluquero } from "./EstadosPeluquero/ocupar";
-import { liberarPeluquero } from "./EstadosPeluquero/liberar";
-import {verificarFinAtencionPeluquero, controlarColaPeluquero, liberarPeluquero, sacarClienteDeEspera, actualizarFinAtencion, actualizarRecaudacion, reducirColaPeluquero, aumentarclientesAtendidosPeluquero} from "./Eventos/finAtencion";
-import {crearTabla} from "./GenrarTabla"
+import {validarDatos} from "./utils/Validaciones.js"
+import {eliminarProximasllegada, calcularRelojAMostrar} from "./utils/Calculos.js"
+import { Aprendiz, AsignacionPeluquero, Cliente, Control, Esperas, Fila, FinAtencionAprendiz, FinAtencionVeteranoA, FinAtencionVeteranoB, LlegadaCliente, Recaudacion, VeteranoA, VeteranoB } from "./Clases.js";
+import { calcularProximaLlegada , asignarPeluquero, calcularFinAtencion, generarNuevoCliente, aumentarColaPeluqueroAsignado} from "./Eventos/llegadaCliente.js";
+import { ocuparPeluquero } from "./EstadosPeluquero/ocupar.js";
+import { liberarPeluquero } from "./EstadosPeluquero/liberar.js";
+import {verificarFinAtencionPeluquero, controlarColaPeluquero, sacarClienteDeEspera, actualizarFinAtencion, actualizarRecaudacion, reducirColaPeluquero, aumentarclientesAtendidosPeluquero} from "./Eventos/finAtencion.js";
+import {crearTabla} from "./GenrarTabla.js"
 
 // Función para generar los datos con base en los datos del formulario
-function generarDatos(datosFormulario) {
+export const generarDatos = (datosFormulario) => {
     // Verificar si los datos son válidos antes de proceder
     if (validarDatos(datosFormulario)) {
         // Aquí puedes implementar la lógica para generar los datos utilizando los valores de datosFormulario
@@ -153,7 +151,7 @@ function generarDatos(datosFormulario) {
             }
         } 
         filasAMostrar.push(ultimaFila);
-        
+        let maxEsperaSimultanea = ultimaFila.esperas.maxEsperaSimultanea;
         crearTabla(maxEsperaSimultanea);
 
         let tablaFilas = document.querySelector('.tbody');

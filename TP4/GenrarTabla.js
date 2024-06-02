@@ -1,5 +1,5 @@
 // Función para crear la tabla con el encabezado dinámico
-function crearTabla(maxEsperaSimultanea) {
+export const crearTabla = (maxEsperaSimultanea) => {
     const table = document.createElement('table');
     table.classList.add('table-data');
 

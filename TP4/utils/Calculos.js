@@ -1,4 +1,4 @@
-import { actualizarRecaudacion } from "../Eventos/finAtencion";
+import { actualizarRecaudacion } from "../Eventos/finAtencion.js";
 
 const calcularUniforme = (rnd, a, b) =>{
     resultado = a + rnd*(b-a);
@@ -82,5 +82,5 @@ export const calcularRelojAMostrar = (reloj, relojAMostrar) => {
     let minutosFormateados = minutos.toString().padStart(2, '0');
     let segundosFormateados = segundos.toString().padStart(2, '0');
     
-    let relojAMostrar = `${horasFormateadas}:${minutosFormateados}:${segundosFormateados}`;
+    relojAMostrar = `${horasFormateadas}:${minutosFormateados}:${segundosFormateados}`;
 }

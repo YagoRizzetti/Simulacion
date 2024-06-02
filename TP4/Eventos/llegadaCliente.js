@@ -1,6 +1,6 @@
-import {Cliente, Control, LlegadaCliente} from "../Clases"
-import { calcularMomentoRefresco, seleccionarPeluquero } from "../utils/Calculos";
-import { generarRandom } from "../utils/GeneradorRandoms";
+import {Cliente, Control} from "../Clases.js"
+import { calcularMomentoRefresco, seleccionarPeluquero } from "../utils/Calculos.js";
+import { generarRandom } from "../utils/GeneradorRandoms.js";
 
 export const calcularProximaLlegada = (uniformaALlegada, uniformeBLlegada, controlEventos, proximaLlegada, dia) =>{
     let rndllegada = generarRandom();
@@ -56,4 +56,17 @@ export const generarNuevoCliente = (controlClientes, esperas, peluqueroAsignado,
         }
     }
     controlClientes.push(clienteCreado);
+}
+
+export const aumentarColaPeluqueroAsignado = (peluqueroAsignado, aprendiz, veteranoA, veteranoB) =>{
+    if(peluqueroFinAtencion == "Aprendiz"){
+        aprendiz.cola ++;
+    }
+    if(peluqueroFinAtencion == "Veterano A"){
+        veteranoA.cola ++;
+    }
+    if(peluqueroFinAtencion == "Veterano B"){
+        veteranoB.cola ++;
+    }
+
 }
