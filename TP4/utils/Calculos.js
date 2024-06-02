@@ -71,3 +71,16 @@ export const controlarRefrescoCliente = (reloj, controlClientes, recaudacion, di
         }
     }
 }
+
+export const calcularRelojAMostrar = (reloj, relojAMostrar) => {
+    let horas = Math.floor(reloj / 3600);
+    let minutos = Math.floor((reloj % 3600) / 60);
+    let segundos = reloj % 60;
+    
+    // Formatear para asegurar que siempre se muestren dos dígitos
+    let horasFormateadas = horas.toString().padStart(2, '0');
+    let minutosFormateados = minutos.toString().padStart(2, '0');
+    let segundosFormateados = segundos.toString().padStart(2, '0');
+    
+    let relojAMostrar = `${horasFormateadas}:${minutosFormateados}:${segundosFormateados}`;
+}

@@ -1,7 +1,7 @@
 import "./Clases";
 import {validarDatos} from "./utils/Validaciones"
 import "./utils/GeneradorRandoms"
-import {eliminarProximasllegada} from "./utils/Calculos"
+import {eliminarProximasllegada, calcularRelojAMostrar} from "./utils/Calculos"
 import { Aprendiz, AsignacionPeluquero, Cliente, Control, Esperas, Fila, FinAtencionAprendiz, FinAtencionVeteranoA, FinAtencionVeteranoB, LlegadaCliente, Recaudacion, VeteranoA, VeteranoB } from "./Clases";
 import { calcularProximaLlegada , asignarPeluquero, calcularFinAtencion, ocuparPeluquero, generarNuevoCliente, aumentarColaPeluqueroAsignado} from "./Eventos/llegadaCliente";
 import { ocuparPeluquero } from "./EstadosPeluquero/ocupar";
@@ -21,9 +21,10 @@ function generarDatos(datosFormulario) {
         const dias = datosFormulario.tiempo;
         let dia = 0;
         let reloj = 0;
+        let relojAMostrar = "";
         const duracionJornada = 60 * 60 * 8;
         let numeroFila = 0;
-        let ultimaFila = new Fila(0,Control,LlegadaCliente,AsignacionPeluquero,FinAtencionAprendiz,FinAtencionVeteranoA,FinAtencionVeteranoB,Aprendiz,VeteranoA,VeteranoB,Recaudacion,Esperas,[Cliente]);
+        let ultimaFila = new Fila(0,Control,relojAMostrar,LlegadaCliente,AsignacionPeluquero,FinAtencionAprendiz,FinAtencionVeteranoA,FinAtencionVeteranoB,Aprendiz,VeteranoA,VeteranoB,Recaudacion,Esperas,[Cliente]);
         let aperturaNegocio = true;
         let finJornada = false;
         let aprendiz = new Aprendiz("Libre",0,0);
@@ -119,9 +120,9 @@ function generarDatos(datosFormulario) {
                 aumentarclientesAtendidosPeluquero(peluqueroFinAtencion, aprendiz, veteranoA, veteranoB);
             }
 
+            calcularRelojAMostrar(reloj, relojAMostrar);
 
-
-            let fila = new Fila(numeroFila,controlEventos[0],proximaLlegada,peluqueroAsignado,finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB,aprendiz,veteranoA,veteranoB,recaudacion,esperas,controlClientes);
+            let fila = new Fila(numeroFila,controlEventos[0],relojAMostrar,proximaLlegada,peluqueroAsignado,finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB,aprendiz,veteranoA,veteranoB,recaudacion,esperas,controlClientes);
             
             if (numeroFila >= datosFormulario.rango[0] && numeroFila <= datosFormulario.rango[1]) {
                 filasAMostrar.push(fila);
@@ -164,6 +165,7 @@ function generarDatos(datosFormulario) {
             row.insertCell().textContent = fila.control.evento;
             row.insertCell().textContent = fila.control.dia;
             row.insertCell().textContent = fila.control.reloj;
+            row.insertCell().textContent = fila.control.relojAMostrar;
             row.insertCell().textContent = fila.proximaLlegada.random;
             row.insertCell().textContent = fila.proximaLlegada.demora;
             row.insertCell().textContent = fila.proximaLlegada.llegada;
@@ -193,7 +195,23 @@ function generarDatos(datosFormulario) {
             row.insertCell().textContent = fila.recaudacion.promedioRecaudacion;
             row.insertCell().textContent = fila.esperas.esperaSimultanea;
             row.insertCell().textContent = fila.esperas.maxEsperaSimultanea;
-            row.insertCell().textContent = fila.clientes.length;
+
+            // Agregar columnas para cada cliente
+            for (let i = 0; i < esperas.maxEsperaSimultanea; i++) {
+                if (i < fila.clientes.length) {
+                    // Si hay un cliente en esta posición, mostrar sus atributos
+                    row.insertCell().textContent = fila.clientes[i].estado;
+                    row.insertCell().textContent = fila.clientes[i].peluquero;
+                    row.insertCell().textContent = fila.clientes[i].momentoRefresco;
+                    row.insertCell().textContent = fila.clientes[i].refresco;
+                } else {
+                    // Si no hay cliente en esta posición, agregar celdas vacías
+                    row.insertCell().textContent = '';
+                    row.insertCell().textContent = '';
+                    row.insertCell().textContent = '';
+                    row.insertCell().textContent = '';
+                }
+            }
         });
 
 

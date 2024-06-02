@@ -11,9 +11,10 @@ export class DatosFormulario {
 }
 
 export class Fila{
-    constructor(numero, control, llegadaCliente, asignacionPeluquero, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, aprendiz, veteranoA, veteranoB, recaudacion, esperas, clientes){
+    constructor(numero, control, relojAMostrar, llegadaCliente, asignacionPeluquero, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, aprendiz, veteranoA, veteranoB, recaudacion, esperas, clientes){
     this.numero = numero;
     this.control = control;
+    this.relojAMostrar = relojAMostrar;
     this.llegadaCliente = llegadaCliente;
     this.asignacionPeluquero = asignacionPeluquero;
     this.finAtencionAprendiz = finAtencionAprendiz;
