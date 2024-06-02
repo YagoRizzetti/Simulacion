@@ -6,7 +6,8 @@ import { Aprendiz, AsignacionPeluquero, Cliente, Control, Esperas, Fila, FinAten
 import { calcularProximaLlegada , asignarPeluquero, calcularFinAtencion, ocuparPeluquero, generarNuevoCliente, aumentarColaPeluqueroAsignado} from "./Eventos/llegadaCliente";
 import { ocuparPeluquero } from "./EstadosPeluquero/ocupar";
 import { liberarPeluquero } from "./EstadosPeluquero/liberar";
-import {verificarFinAtencionPeluquero, controlarColaPeluquero, liberarPeluquero, sacarClienteDeEspera, actualizarFinAtencion, actualizarRecaudacion, reducirColaPeluquero, aumentarclientesAtendidosPeluquero} from "./Eventos/finAtencion"
+import {verificarFinAtencionPeluquero, controlarColaPeluquero, liberarPeluquero, sacarClienteDeEspera, actualizarFinAtencion, actualizarRecaudacion, reducirColaPeluquero, aumentarclientesAtendidosPeluquero} from "./Eventos/finAtencion";
+import {crearTabla} from "./GenrarTabla"
 
 // Función para generar los datos con base en los datos del formulario
 function generarDatos(datosFormulario) {
@@ -152,6 +153,8 @@ function generarDatos(datosFormulario) {
             }
         } 
         filasAMostrar.push(ultimaFila);
+        
+        crearTabla(maxEsperaSimultanea);
 
         let tablaFilas = document.querySelector('.tbody');
 
