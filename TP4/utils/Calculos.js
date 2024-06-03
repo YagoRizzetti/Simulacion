@@ -1,13 +1,14 @@
 import { actualizarRecaudacion } from "../Eventos/finAtencion.js";
 
 const calcularUniforme = (rnd, a, b) =>{
-    resultado = a + rnd*(b-a);
+    let resultado = a +(rnd*(b-a));
+    resultado = Math.round(resultado); // Redondear a un número entero
     return resultado;
 }
 
 
 export const calcularDemoraLlegada = (rndllegada, a , b) =>{
-    demora = calcularUniforme(rndllegada, a, b);
+    let demora = calcularUniforme(rndllegada, a, b);
     return demora;
 }
 
@@ -47,24 +48,12 @@ export const calcularMomentoRefresco = (reloj) =>{
     return momentoRefresco;
 }
 
-export const aumentarColaPeluqueroAsignado = (peluqueroAsignado, aprendiz, veteranoA, veteranoB) =>{
-    if(peluqueroAsignado == "Aprendiz"){
-        aprendiz.cola ++;
-    }
-    if(peluqueroAsignado == "Veterano A"){
-        veteranoA.cola ++;
-    }
-    else{
-        veteranoB.cola ++;
-    }
-}
-
 export const eliminarProximasllegada = (controlEventos) => {
     controlEventos = controlEventos.filter(evento => evento.evento !== "Llegada Cliente");
 };
 
 export const controlarRefrescoCliente = (reloj, controlClientes, recaudacion, dia) =>{
-    for (cliente of controlClientes){
+    for (let cliente of controlClientes){
         if(reloj >= cliente.momentoRefresco && !cliente.refresco){
             actualizarRecaudacion("",recaudacion, "Gasto", dia);
             cliente.refresco = true;

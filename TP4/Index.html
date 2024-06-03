@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <script type="module" src="Generador.js"></script>
-    <script type="module" src="./utils/DatosFormulario.js"></script>
-    <title>TP3</title>
+    <script type="module">        
+        import {generarDatos} from './Generador.js';
+        import { obtenerDatosFormulario, limpiarFormulario} from './utils/DatosFormulario.js';
+        window.generarDatos = generarDatos;
+        window.obtenerDatosFormulario = obtenerDatosFormulario;
+        window.limpiarFormulario = limpiarFormulario;</script>
+    <title>TP4</title>
 </head>
 
 <body>
@@ -56,7 +60,7 @@
             </div>
         </fieldset>
         <div class="div-button-2">
-            <button class="button submit" type="button" onclick="generarDatos(obtenerDatosFormulario())">Generar Datos</button>
+            <button class="button submit" type="submit" onclick="generarDatos(obtenerDatosFormulario())">Generar Datos</button>
             <button class="button reset" type="reset"  onclick="limpiarFormulario()">Limpiar Formulario</button>
         </div>
     </div>

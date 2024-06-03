@@ -1,4 +1,4 @@
-import {DatosFormulario} from "../Clases.js"
+import {DatosFormulario} from "../Clases.js";
 // Obtener los valores de los inputs y crear un objeto de la clase DatosFormulario
 export const obtenerDatosFormulario = () => {
     const tiempo = parseInt(document.getElementById('tiempo').value);

@@ -1,8 +1,8 @@
 import {Cliente, Control} from "../Clases.js"
-import { calcularMomentoRefresco, seleccionarPeluquero } from "../utils/Calculos.js";
+import { calcularMomentoRefresco, seleccionarPeluquero, calcularDemoraLlegada} from "../utils/Calculos.js";
 import { generarRandom } from "../utils/GeneradorRandoms.js";
 
-export const calcularProximaLlegada = (uniformaALlegada, uniformeBLlegada, controlEventos, proximaLlegada, dia) =>{
+export const calcularProximaLlegada = (uniformaALlegada, uniformeBLlegada, controlEventos, proximaLlegada, dia, reloj) =>{
     let rndllegada = generarRandom();
     let demora = calcularDemoraLlegada(rndllegada, uniformaALlegada, uniformeBLlegada)
     let momentoLlegada = reloj + demora;
@@ -41,10 +41,10 @@ export const calcularFinAtencion = (rndFinAtencion, reloj, peluquero, demoraAten
 
 export const generarNuevoCliente = (controlClientes, esperas, peluqueroAsignado, reloj) =>{
     let clienteCreado = new Cliente();
-    if(length.controlClientes = 0){
+    if(length.controlClientes == 0){
         clienteCreado = (1, "En Espera", peluqueroAsignado, calcularMomentoRefresco(reloj), "No");
     }
-    if(length.controlClientes = esperas.maxEsperaSimultanea){
+    if(length.controlClientes == esperas.maxEsperaSimultanea){
         let numero = esperas.maxEsperaSimultanea + 1;
         clienteCreado = (numero, "En Espera", peluqueroAsignado, calcularMomentoRefresco(reloj), "No");
     }
@@ -59,13 +59,13 @@ export const generarNuevoCliente = (controlClientes, esperas, peluqueroAsignado,
 }
 
 export const aumentarColaPeluqueroAsignado = (peluqueroAsignado, aprendiz, veteranoA, veteranoB) =>{
-    if(peluqueroFinAtencion == "Aprendiz"){
+    if(peluqueroAsignado == "Aprendiz"){
         aprendiz.cola ++;
     }
-    if(peluqueroFinAtencion == "Veterano A"){
+    if(peluqueroAsignado == "Veterano A"){
         veteranoA.cola ++;
     }
-    if(peluqueroFinAtencion == "Veterano B"){
+    if(peluqueroAsignado == "Veterano B"){
         veteranoB.cola ++;
     }
 

@@ -1,11 +1,11 @@
-import {validarDatos} from "./utils/Validaciones.js"
-import {eliminarProximasllegada, calcularRelojAMostrar} from "./utils/Calculos.js"
+import {validarDatos} from "./utils/Validaciones.js";
+import {eliminarProximasllegada, calcularRelojAMostrar, controlarRefrescoCliente, verificarEstadoPeluquero} from "./utils/Calculos.js";
 import { Aprendiz, AsignacionPeluquero, Cliente, Control, Esperas, Fila, FinAtencionAprendiz, FinAtencionVeteranoA, FinAtencionVeteranoB, LlegadaCliente, Recaudacion, VeteranoA, VeteranoB } from "./Clases.js";
 import { calcularProximaLlegada , asignarPeluquero, calcularFinAtencion, generarNuevoCliente, aumentarColaPeluqueroAsignado} from "./Eventos/llegadaCliente.js";
 import { ocuparPeluquero } from "./EstadosPeluquero/ocupar.js";
 import { liberarPeluquero } from "./EstadosPeluquero/liberar.js";
 import {verificarFinAtencionPeluquero, controlarColaPeluquero, sacarClienteDeEspera, actualizarFinAtencion, actualizarRecaudacion, reducirColaPeluquero, aumentarclientesAtendidosPeluquero} from "./Eventos/finAtencion.js";
-import {crearTabla} from "./GenrarTabla.js"
+import {crearTabla} from "./GenrarTabla.js";
 
 // Función para generar los datos con base en los datos del formulario
 export const generarDatos = (datosFormulario) => {
@@ -14,11 +14,11 @@ export const generarDatos = (datosFormulario) => {
         // Aquí puedes implementar la lógica para generar los datos utilizando los valores de datosFormulario
         console.log('Generando datos...');
         console.log(datosFormulario);
-        let distribucionAprendiz = [datosFormulario.Aprendiz[1], datosFormulario.Aprendiz[2]]
-        let distribucionVeteranoA = [datosFormulario.VeteranoA[1], datosFormulario.VeteranoA[2]]
-        let distribucionVeteranoB= [datosFormulario.VeteranoB[1], datosFormulario.VeteranoB[2]]
+        let distribucionAprendiz = [datosFormulario.aprendiz[1], datosFormulario.aprendiz[2]];
+        let distribucionVeteranoA = [datosFormulario.veteranoA[1], datosFormulario.veteranoA[2]];
+        let distribucionVeteranoB= [datosFormulario.veteranoB[1], datosFormulario.veteranoB[2]];
         const dias = datosFormulario.tiempo;
-        let dia = 0;
+        let dia = 1;
         let reloj = 0;
         let relojAMostrar = "";
         const duracionJornada = 60 * 60 * 8;
@@ -30,9 +30,9 @@ export const generarDatos = (datosFormulario) => {
         let veteranoA = new VeteranoA("Libre",0,0);
         let veteranoB = new VeteranoB("Libre",0,0);
         let esperas = new Esperas(0,0);
-        let filasAMostrar = [Fila];
-        let controlEventos = [Control];
-        let controlClientes = [Cliente];
+        let filasAMostrar = [];
+        let controlEventos = [];
+        let controlClientes = [];
         let proximaLlegada = new LlegadaCliente(0,0,0);
         let finAtencionAprendiz = new FinAtencionAprendiz(0,0,0);
         let finAtencionVeteranoA = new FinAtencionVeteranoA(0,0,0);
@@ -43,8 +43,8 @@ export const generarDatos = (datosFormulario) => {
         let demoraAtencion = 0;
         let finAtencion = 0;
         let rndFinAtencion = 0;
-        while (dia < dias && numeroFila <= 100000) {
-            if (dia >= dias) break;
+        while (dia < dias && numeroFila <= 1000) {
+            if (dia >= dias && controlEventos.length == 0) break;
 
             numeroFila++;
             reloj = controlEventos.length > 0 ? reloj + (controlEventos[0].reloj - reloj): reloj;
@@ -60,9 +60,9 @@ export const generarDatos = (datosFormulario) => {
             // Si recien Abre el negocio 
             if(aperturaNegocio){
                 // Calculando y guardando la proxima llegada
-                calcularProximaLlegada(datosFormulario.LlegadaClientes[0], datosFormulario.LlegadaClientes[1], controlEventos, proximaLlegada, dia);
-                aperturaNegocio = false;
                 reloj = 0;
+                calcularProximaLlegada(datosFormulario.llegadaClientes[0], datosFormulario.llegadaClientes[1], controlEventos, proximaLlegada, dia, reloj);
+                aperturaNegocio = false;
             }
 
             // Controlando si algun Cliente supero los 30 minutos de espera y necesita un refresco
@@ -71,9 +71,9 @@ export const generarDatos = (datosFormulario) => {
             // Evento Llegada de Cliente
             if(controlEventos[0].evento = "llegada Cliente" && !finJornada){
                 // Calculando y guardando la proxima llegada
-                calcularProximaLlegada(datosFormulario.LlegadaClientes[0], datosFormulario.LlegadaClientes[1], controlEventos, proximaLlegada, dia);
+                calcularProximaLlegada(datosFormulario.llegadaClientes[0], datosFormulario.llegadaClientes[1], controlEventos, proximaLlegada, dia, reloj);
                 // Generando la asignacion del peluquero para el cliente que acaba de llegar
-                asignarPeluquero(peluqueroAsignado, datosFormulario.Aprendiz[0], datosFormulario.VeteranoA[0]);
+                asignarPeluquero(peluqueroAsignado, datosFormulario.aprendiz[0], datosFormulario.veteranoA[0]);
                 // Verificando si el peluquero esta libre
                 if(verificarEstadoPeluquero(peluqueroAsignado.peluquero, aprendiz, veteranoA, veteranoB)){
                     // Calcular Fin de Atencion del Peluquero
@@ -107,10 +107,10 @@ export const generarDatos = (datosFormulario) => {
                 }
                 // si tiene clientes en cola
                 else{
-                // Calculando el Proximo Fin de Atencion para el nuevo cliente
-                calcularFinAtencion(rndFinAtencion, reloj, demoraAtencion, finAtencion, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, controlEventos, dia);
-                sacarClienteDeEspera(peluqueroFinAtencion,controlClientes);
-                actualizarFinAtencion(peluqueroFinAtencion, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, rndFinAtencion, demoraAtencion, finAtencion);
+                    // Calculando el Proximo Fin de Atencion para el nuevo cliente
+                    calcularFinAtencion(rndFinAtencion, reloj, demoraAtencion, finAtencion, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, controlEventos, dia);
+                    sacarClienteDeEspera(peluqueroFinAtencion,controlClientes);
+                    actualizarFinAtencion(peluqueroFinAtencion, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, rndFinAtencion, demoraAtencion, finAtencion);
                 }
                 // actualizando datos de espera, recaudacion y del objeto peluquero 
                 esperas.esperaSimultanea --;
@@ -167,11 +167,11 @@ export const generarDatos = (datosFormulario) => {
             row.insertCell().textContent = fila.control.dia;
             row.insertCell().textContent = fila.control.reloj;
             row.insertCell().textContent = fila.control.relojAMostrar;
-            row.insertCell().textContent = fila.proximaLlegada.random;
-            row.insertCell().textContent = fila.proximaLlegada.demora;
-            row.insertCell().textContent = fila.proximaLlegada.llegada;
-            row.insertCell().textContent = fila.peluqueroAsignado.random;
-            row.insertCell().textContent = fila.peluqueroAsignado.peluquero;
+            row.insertCell().textContent = fila.llegadaCliente.random;
+            row.insertCell().textContent = fila.llegadaCliente.demora;
+            row.insertCell().textContent = fila.llegadaCliente.llegada;
+            row.insertCell().textContent = fila.asignacionPeluquero.random;
+            row.insertCell().textContent = fila.asignacionPeluquero.peluquero;
             row.insertCell().textContent = fila.finAtencionAprendiz.random;
             row.insertCell().textContent = fila.finAtencionAprendiz.demora;
             row.insertCell().textContent = fila.finAtencionAprendiz.finAtencion;
@@ -223,4 +223,3 @@ export const generarDatos = (datosFormulario) => {
         // Aquí puedes mostrar un mensaje al usuario indicando que los datos no son válidos
     }
 }
-
