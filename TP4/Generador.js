@@ -31,18 +31,15 @@ export const generarDatos = (datosFormulario) => {
         let veteranoB = new VeteranoB("Libre",0,0);
         let esperas = new Esperas(0,0);
         let filasAMostrar = [];
-        let controlEventos = [];
-        let controlClientes = [];
+        let controlEventos = [Control];
+        let controlClientes = [Cliente];
         let proximaLlegada = new LlegadaCliente(0,0,0);
         let finAtencionAprendiz = new FinAtencionAprendiz(0,0,0);
         let finAtencionVeteranoA = new FinAtencionVeteranoA(0,0,0);
         let finAtencionVeteranoB = new FinAtencionVeteranoB(0,0,0);
         let recaudacion = new Recaudacion(0,0,0,0);
-        let peluqueroAsignado = new AsignacionPeluquero(null,"");
+        let peluqueroAsignado = new AsignacionPeluquero(0,"");
         let peluqueroFinAtencion = "";
-        let demoraAtencion = 0;
-        let finAtencion = 0;
-        let rndFinAtencion = 0;
         while (dia < dias && numeroFila <= 1000) {
             if (dia >= dias && controlEventos.length == 0) break;
 
@@ -77,7 +74,7 @@ export const generarDatos = (datosFormulario) => {
                 // Verificando si el peluquero esta libre
                 if(verificarEstadoPeluquero(peluqueroAsignado.peluquero, aprendiz, veteranoA, veteranoB)){
                     // Calcular Fin de Atencion del Peluquero
-                    calcularFinAtencion(rndFinAtencion, reloj, demoraAtencion, finAtencion, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, controlEventos, dia);
+                    calcularFinAtencion(reloj, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, controlEventos, dia);
                     ocuparPeluquero(peluqueroAsignado.peluquero, aprendiz, veteranoA, veteranoB);
                 }
                 // Si el Peluquero Esta Ocupado
@@ -108,7 +105,7 @@ export const generarDatos = (datosFormulario) => {
                 // si tiene clientes en cola
                 else{
                     // Calculando el Proximo Fin de Atencion para el nuevo cliente
-                    calcularFinAtencion(rndFinAtencion, reloj, demoraAtencion, finAtencion, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, controlEventos, dia);
+                    calcularFinAtencion(reloj, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, controlEventos, dia);
                     sacarClienteDeEspera(peluqueroFinAtencion,controlClientes);
                     actualizarFinAtencion(peluqueroFinAtencion, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, rndFinAtencion, demoraAtencion, finAtencion);
                 }

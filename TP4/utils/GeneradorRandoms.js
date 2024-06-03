@@ -1,6 +1,7 @@
 
 export const generarRandom = () =>{
-    let numeroAleatorio = Math.random()
+    let numeroAleatorio = 0;
+    numeroAleatorio = Math.random()
     if(numeroAleatorio == 1){
         numeroAleatorio = numeroAleatorio - 0.01
     }

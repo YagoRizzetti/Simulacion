@@ -1,14 +1,16 @@
 import { actualizarRecaudacion } from "../Eventos/finAtencion.js";
 
 const calcularUniforme = (rnd, a, b) =>{
-    let resultado = a +(rnd*(b-a));
+    let resultado = 0
+    resultado = a +(rnd*(b-a));
     resultado = Math.round(resultado); // Redondear a un número entero
     return resultado;
 }
 
 
 export const calcularDemoraLlegada = (rndllegada, a , b) =>{
-    let demora = calcularUniforme(rndllegada, a, b);
+    let demora = 0;
+    demora = calcularUniforme(rndllegada, a, b);
     return demora;
 }
 
@@ -44,7 +46,7 @@ export const verificarEstadoPeluquero = (peluqueroAsignado, aprendiz, veteranoA,
 }
 
 export const calcularMomentoRefresco = (reloj) =>{
-    momentoRefresco = reloj + 1800;
+    let momentoRefresco = reloj + 1800;
     return momentoRefresco;
 }
 

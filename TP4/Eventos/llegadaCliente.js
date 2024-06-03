@@ -3,7 +3,8 @@ import { calcularMomentoRefresco, seleccionarPeluquero, calcularDemoraLlegada} f
 import { generarRandom } from "../utils/GeneradorRandoms.js";
 
 export const calcularProximaLlegada = (uniformaALlegada, uniformeBLlegada, controlEventos, proximaLlegada, dia, reloj) =>{
-    let rndllegada = generarRandom();
+    let rndllegada = 0;
+    rndllegada = generarRandom();
     let demora = calcularDemoraLlegada(rndllegada, uniformaALlegada, uniformeBLlegada)
     let momentoLlegada = reloj + demora;
     let control = new Control("llegada Cliente", dia, momentoLlegada);
@@ -13,12 +14,16 @@ export const calcularProximaLlegada = (uniformaALlegada, uniformeBLlegada, contr
 }
 
 export const asignarPeluquero = (peluqueroAsignado, probabilidadAprendiz, probabilidadVeteranoA) =>{
-    let rndAsignacion = generarRandom();
+    let rndAsignacion = 0;
+    rndAsignacion = generarRandom();
     peluqueroAsignado = seleccionarPeluquero(rndAsignacion, probabilidadAprendiz, probabilidadVeteranoA);
 }
 
-export const calcularFinAtencion = (rndFinAtencion, reloj, peluquero, demoraAtencion, finAtencion ,distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, controlEventos, dia) =>{
+export const calcularFinAtencion = (reloj, peluquero, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, controlEventos, dia) =>{
+    let rndFinAtencion = 0;
     rndFinAtencion = generarRandom();
+    let demoraAtencion = 0;
+    let finAtencion = 0;
     if(peluquero == "Aprendiz"){
         demoraAtencion = calcularUniforme(rndFinAtencion, distribucionAprendiz[0], distribucionAprendiz[1]);
         finAtencion = reloj + demoraAtencion;
@@ -42,16 +47,28 @@ export const calcularFinAtencion = (rndFinAtencion, reloj, peluquero, demoraAten
 export const generarNuevoCliente = (controlClientes, esperas, peluqueroAsignado, reloj) =>{
     let clienteCreado = new Cliente();
     if(length.controlClientes == 0){
-        clienteCreado = (1, "En Espera", peluqueroAsignado, calcularMomentoRefresco(reloj), "No");
+        clienteCreado.numero = 1;
+        clienteCreado.estado = "En Espera";
+        clienteCreado.peluquero = peluqueroAsignado;
+        clienteCreado.momentoRefresco = calcularMomentoRefresco(reloj);
+        clienteCreado.refresco = "No";
     }
     if(length.controlClientes == esperas.maxEsperaSimultanea){
         let numero = esperas.maxEsperaSimultanea + 1;
-        clienteCreado = (numero, "En Espera", peluqueroAsignado, calcularMomentoRefresco(reloj), "No");
+        clienteCreado.numero = numero;
+        clienteCreado.estado = "En Espera";
+        clienteCreado.peluquero = peluqueroAsignado;
+        clienteCreado.momentoRefresco = calcularMomentoRefresco(reloj);
+        clienteCreado.refresco = "No";
     }
-    if(length.controlClientes < esperas.esperaSimultanea){
+    if(controlClientes.length < esperas.esperaSimultanea){
         for(let cliente in controlClientes){
             if(cliente.estado == ""){
-                clienteCreado = (cliente.numero, "En Espera", peluqueroAsignado, calcularMomentoRefresco(reloj), "No");
+                clienteCreado.numero = cliente.numero;
+                clienteCreado.estado = "En Espera";
+                clienteCreado.peluquero = peluqueroAsignado;
+                clienteCreado.momentoRefresco = calcularMomentoRefresco(reloj);
+                clienteCreado.refresco = "No";
             } 
         }
     }

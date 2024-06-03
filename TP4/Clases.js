@@ -11,6 +11,23 @@ export class DatosFormulario {
 }
 
 export class Fila{
+    /**
+ * Clase que representa una fila en algún contexto específico.
+ * @param {number} numero - Número de la fila.
+ * @param {Control} control - Objeto de tipo Control.
+ * @param {string} relojAMostrar - Cadena que representa la hora en la fila.
+ * @param {LlegadaCliente} llegadaCliente - Objeto de tipo LlegadaCliente.
+ * @param {AsignacionPeluquero} asignacionPeluquero - Objeto de tipo AsignacionPeluquero.
+ * @param {FinAtencionAprendiz} finAtencionAprendiz - Objeto de tipo FinAtencionAprendiz.
+ * @param {FinAtencionVeteranoA} finAtencionVeteranoA - Objeto de tipo FinAtencionVeteranoA.
+ * @param {FinAtencionVeteranoB} finAtencionVeteranoB - Objeto de tipo FinAtencionVeteranoB.
+ * @param {Aprendiz} aprendiz - Objeto de tipo Aprendiz.
+ * @param {VeteranoA} veteranoA - Objeto de tipo VeteranoA.
+ * @param {VeteranoB} veteranoB - Objeto de tipo VeteranoB.
+ * @param {Recaudacion} recaudacion - Objeto de tipo Recaudacion.
+ * @param {Esperas} esperas - Objeto de tipo Esperas.
+ * @param {Array<Cliente>} clientes - Array de objetos Cliente.
+ */
     constructor(numero, control, relojAMostrar, llegadaCliente, asignacionPeluquero, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, aprendiz, veteranoA, veteranoB, recaudacion, esperas, clientes){
     this.numero = numero;
     this.control = control;
@@ -30,6 +47,11 @@ export class Fila{
 }
 
 export class Control{
+    /**
+    * @param {string} evento 
+    * @param {number} dia 
+    * @param {number} reloj 
+    */
     constructor(evento, dia, reloj){
         this.evento = evento;
         this.dia = dia;
@@ -38,6 +60,10 @@ export class Control{
 }
 
 export class Evento{
+    /**
+    * @param {Float32Array} rnd 
+    * @param {number} demora 
+    */
     constructor(rnd,demora){
         this.random = rnd;
         this.demora = demora;
@@ -45,6 +71,10 @@ export class Evento{
 }
 
 export class LlegadaCliente extends Evento{
+    /**
+    * @param {number} llegada 
+    */
+
     constructor(random, demora, llegada){
         super(random, demora);
         this.llegada = llegada;
@@ -52,6 +82,10 @@ export class LlegadaCliente extends Evento{
 }
 
 export class AsignacionPeluquero extends Evento{
+        /**
+    * @param {string} peluquero 
+    */
+
     constructor(random, peluquero){
         super(random);
         this.peluquero = peluquero;
@@ -59,6 +93,9 @@ export class AsignacionPeluquero extends Evento{
 }
 
 export class FinAtencionAprendiz extends Evento{
+        /**
+    * @param {number} finAtencion 
+    */
     constructor(random, demora, finAtencion){
         super(random, demora);
         this.finAtencion = finAtencion;
@@ -66,6 +103,10 @@ export class FinAtencionAprendiz extends Evento{
 }
 
 export class FinAtencionVeteranoA extends Evento{
+    /**
+    * @param {number} finAtencion 
+    */
+
     constructor(random, demora, finAtencion){
         super(random, demora);
         this.finAtencion = finAtencion;
@@ -73,6 +114,10 @@ export class FinAtencionVeteranoA extends Evento{
 }
 
 export class FinAtencionVeteranoB extends Evento{
+    /**
+    * @param {number} finAtencion 
+    */
+
     constructor(random, demora, finAtencion){
         super(random, demora);
         this.finAtencion = finAtencion;
@@ -80,6 +125,11 @@ export class FinAtencionVeteranoB extends Evento{
 }
 
 class ObjetosPermanentes{
+        /**
+    * @param {string} estado 
+    * @param {number} cola 
+    * @param {number} clientesAtendidos 
+    */
     constructor(estado, cola, clientesAtendidos){
         this.estado = estado;
         this.cola = cola;
@@ -106,6 +156,12 @@ export class VeteranoB extends ObjetosPermanentes{
 }
 
 export class Recaudacion{
+    /**
+    * @param {number} ganancias 
+    * @param {number} gastos
+    * @param {number} gananciasNetas
+    * @param {Float32Array} promRecaudacion
+    */
     constructor(ganancias, gastos, gananciasNetas, promRecaudacion){
         this.gananciasDiarias = ganancias;
         this.gastosDiarios = gastos;
@@ -115,6 +171,10 @@ export class Recaudacion{
 }
 
 export class Esperas{
+    /**
+    * @param {number} esperaSimultaneas
+    * @param {number} maxEsperaSimultanea
+    */
     constructor(esperaSimultaneas, maxEsperaSimultanea){
         this.esperaSimultanea = esperaSimultaneas;
         this.maxEsperaSimultanea = maxEsperaSimultanea;
@@ -122,6 +182,13 @@ export class Esperas{
 }
 
 export class Cliente{
+        /**
+    * @param {number} numero 
+    * @param {string} estado 
+    * @param {string} peluquero 
+    * @param {number} momentoRefresco 
+    * @param {string} refresco
+    */
     constructor(numero, estado, peluquero, momentoRefresco, refresco){
         this.numero = numero;
         this.estado = estado;
