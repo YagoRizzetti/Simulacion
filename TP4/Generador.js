@@ -1,11 +1,34 @@
 import {validarDatos} from "./utils/Validaciones.js";
-import {eliminarProximasllegada, calcularRelojAMostrar, controlarRefrescoCliente, verificarEstadoPeluquero} from "./utils/Calculos.js";
 import { Aprendiz, AsignacionPeluquero, Cliente, Control, Esperas, Fila, FinAtencionAprendiz, FinAtencionVeteranoA, FinAtencionVeteranoB, LlegadaCliente, Recaudacion, VeteranoA, VeteranoB } from "./Clases.js";
-import { calcularProximaLlegada , asignarPeluquero, calcularFinAtencion, generarNuevoCliente, aumentarColaPeluqueroAsignado} from "./Eventos/llegadaCliente.js";
-import { ocuparPeluquero } from "./EstadosPeluquero/ocupar.js";
-import { liberarPeluquero } from "./EstadosPeluquero/liberar.js";
-import {verificarFinAtencionPeluquero, controlarColaPeluquero, sacarClienteDeEspera, actualizarFinAtencion, actualizarRecaudacion, reducirColaPeluquero, aumentarclientesAtendidosPeluquero} from "./Eventos/finAtencion.js";
 import {crearTabla} from "./GenrarTabla.js";
+import { llegadaCliente } from "./llegadaCliente.js";
+import { aperturaNegocio } from "./aperturaNegocio.js";
+import { finAtencion } from "./finAtencion.js";
+
+const esllegadaCliente = (ultimaFila) =>{
+    if(ultimaFila.control.reloj < ultimaFila.llegadaCliente.llegada){
+        if(ultimaFila.llegadaCliente.llegada <= ultimaFila.finAtencionAprendiz.finAtencion && ultimaFila.llegadaCliente.llegada <= ultimaFila.finAtencionVeteranoA.finAtencion && ultimaFila.llegadaCliente.llegada <= ultimaFila.finAtencionVeteranoB.finAtencion){
+            return true
+        }
+    }
+    return false
+}
+
+const esFinAtencion = (ultimaFila) =>{
+    if(ultimaFila.control.reloj < ultimaFila.finAtencionAprendiz.finAtencion || ultimaFila.control.reloj < ultimaFila.finAtencionVeteranoA.finAtencion || ultimaFila.control.reloj < ultimaFila.finAtencionVeteranoB.finAtencion ){
+        if(ultimaFila.llegadaCliente.llegada >= ultimaFila.finAtencionAprendiz.finAtencion || ultimaFila.llegadaCliente.llegada >= ultimaFila.finAtencionVeteranoA.finAtencion || ultimaFila.llegadaCliente.llegada >= ultimaFila.finAtencionVeteranoB.finAtencion){
+            return true
+        }
+    }
+    return false
+}
+
+const esUltimoClienteDelDia = (ultimaFila) =>{
+    if(ultimaFila.llegadaCliente.llegada == 0 && ultimaFila.finAtencionAprendiz.finAtencion == 0 && ultimaFila.finAtencionVeteranoA.finAtencion == 0 && ultimaFila.finAtencionVeteranoB.finAtencion == 0 && ultimaFila.esperas.esperaSimultanea == 0){
+        return true
+    }
+    return false
+}
 
 // Función para generar los datos con base en los datos del formulario
 export const generarDatos = (datosFormulario) => {
@@ -14,24 +37,28 @@ export const generarDatos = (datosFormulario) => {
         // Aquí puedes implementar la lógica para generar los datos utilizando los valores de datosFormulario
         console.log('Generando datos...');
         console.log(datosFormulario);
-        let distribucionAprendiz = [datosFormulario.aprendiz[1], datosFormulario.aprendiz[2]];
-        let distribucionVeteranoA = [datosFormulario.veteranoA[1], datosFormulario.veteranoA[2]];
-        let distribucionVeteranoB= [datosFormulario.veteranoB[1], datosFormulario.veteranoB[2]];
+        let distribucionAAprendiz = datosFormulario.aprendiz[1];
+        let distribucionBAprendiz = datosFormulario.aprendiz[2];
+        let distribucionAVeteranoA = datosFormulario.veteranoA[1];
+        let distribucionBVeteranoA =  datosFormulario.veteranoA[2];
+        let distribucionAVeteranoB = datosFormulario.veteranoB[1];
+        let distribucionBVeteranoB = datosFormulario.veteranoB[2];
+        let distribucionALlegada = datosFormulario.llegadaClientes[0];
+        let distribucionBLlegada = datosFormulario.llegadaClientes[1];
+        let probabilidadAprendiz = datosFormulario.aprendiz[0];
+        let probabilidadVeteranoA = datosFormulario.veteranoA[0];
+        let probabilidadVeteranoB = datosFormulario.veteranoB[0];
         const dias = datosFormulario.tiempo;
-        let dia = 1;
-        let reloj = 0;
-        let relojAMostrar = "";
+        let relojAMostrar = "00:00:00";
         const duracionJornada = 60 * 60 * 8;
-        let numeroFila = 0;
-        let ultimaFila = new Fila(0,Control,relojAMostrar,LlegadaCliente,AsignacionPeluquero,FinAtencionAprendiz,FinAtencionVeteranoA,FinAtencionVeteranoB,Aprendiz,VeteranoA,VeteranoB,Recaudacion,Esperas,[Cliente]);
-        let aperturaNegocio = true;
+        let apertura = true;
         let finJornada = false;
         let aprendiz = new Aprendiz("Libre",0,0);
         let veteranoA = new VeteranoA("Libre",0,0);
         let veteranoB = new VeteranoB("Libre",0,0);
         let esperas = new Esperas(0,0);
         let filasAMostrar = [];
-        let controlEventos = [Control];
+        let control = new Control("Inicio Jornada",0,0);
         let controlClientes = [Cliente];
         let proximaLlegada = new LlegadaCliente(0,0,0);
         let finAtencionAprendiz = new FinAtencionAprendiz(0,0,0);
@@ -39,114 +66,57 @@ export const generarDatos = (datosFormulario) => {
         let finAtencionVeteranoB = new FinAtencionVeteranoB(0,0,0);
         let recaudacion = new Recaudacion(0,0,0,0);
         let peluqueroAsignado = new AsignacionPeluquero(0,"");
-        let peluqueroFinAtencion = "";
-        while (dia < dias && numeroFila <= 1000) {
-            if (dia >= dias && controlEventos.length == 0) break;
-
-            numeroFila++;
-            reloj = controlEventos.length > 0 ? reloj + (controlEventos[0].reloj - reloj): reloj;
-            // Controlar si ya se Termino la jornada del dia
-            if(reloj >= duracionJornada){
+        let ultimaFila = new Fila(0,control,relojAMostrar,proximaLlegada,peluqueroAsignado,finAtencionAprendiz,finAtencionVeteranoA,finAtencionVeteranoB,aprendiz,veteranoA,veteranoB,recaudacion,esperas,controlClientes);
+        let numero = 0;
+        while (numero < 5) {
+            numero++;
+            console.log(ultimaFila);
+            if (ultimaFila.control.dia >= dias && controlEventos.length == 0) break;
+            
+            if(ultimaFila.control.reloj >= duracionJornada){
                 finJornada = true;
-                proximaLlegada.random = null;
-                proximaLlegada.demora = null;
-                proximaLlegada.llegada = null;
-                eliminarProximasllegada(controlEventos);
             }
-
-            // Si recien Abre el negocio 
-            if(aperturaNegocio){
-                // Calculando y guardando la proxima llegada
-                reloj = 0;
-                calcularProximaLlegada(datosFormulario.llegadaClientes[0], datosFormulario.llegadaClientes[1], controlEventos, proximaLlegada, dia, reloj);
-                aperturaNegocio = false;
-            }
-
-            // Controlando si algun Cliente supero los 30 minutos de espera y necesita un refresco
-            controlarRefrescoCliente(reloj, controlClientes, recaudacion, dia)
-
-            // Evento Llegada de Cliente
-            if(controlEventos[0].evento = "llegada Cliente" && !finJornada){
-                // Calculando y guardando la proxima llegada
-                calcularProximaLlegada(datosFormulario.llegadaClientes[0], datosFormulario.llegadaClientes[1], controlEventos, proximaLlegada, dia, reloj);
-                // Generando la asignacion del peluquero para el cliente que acaba de llegar
-                asignarPeluquero(peluqueroAsignado, datosFormulario.aprendiz[0], datosFormulario.veteranoA[0]);
-                // Verificando si el peluquero esta libre
-                if(verificarEstadoPeluquero(peluqueroAsignado.peluquero, aprendiz, veteranoA, veteranoB)){
-                    // Calcular Fin de Atencion del Peluquero
-                    calcularFinAtencion(reloj, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, controlEventos, dia);
-                    ocuparPeluquero(peluqueroAsignado.peluquero, aprendiz, veteranoA, veteranoB);
-                }
-                // Si el Peluquero Esta Ocupado
-                else{
-                    // Generando Nuevo Cliente
-                    generarNuevoCliente(controlClientes, esperas, peluqueroAsignado.peluquero, reloj);
-                    // Actualizando la cola del peluquero Asignado
-                    aumentarColaPeluqueroAsignado(peluqueroAsignado.peluquero, aprendiz, veteranoA, veteranoB);
-                    // Gestionando las Esperas
-                    esperas.esperaSimultanea ++;
-                    if (esperas.esperaSimultanea > esperas.maxEsperaSimultanea){
-                        esperas.maxEsperaSimultanea = esperas.esperaSimultanea
-                    }
-                }
-                peluqueroAsignado.random = null;
-                peluqueroAsignado.peluquero = "";
-            }
+            // Cuando Abre El Negocio
+            if(apertura){
+                let nuevaFila = new Fila();
+                nuevaFila = aperturaNegocio(nuevaFila, ultimaFila, distribucionALlegada, distribucionBLlegada);
+                apertura = false;
+                ultimaFila = nuevaFila;
+                continue;
+            } 
             
-            // Evento Fin de Atencion
-            if(controlEventos[0].evento = "Fin Atencion"){
-                verificarFinAtencionPeluquero(peluqueroFinAtencion, reloj, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB);
-                // Controlar cola de Peluquero que termino de Atender (si no tiene clientes en cola)
-                if(controlarColaPeluquero(peluqueroFinAtencion, aprendiz, veteranoA, veteranoB)){
-                    liberarPeluquero(peluqueroFinAtencion, aprendiz, veteranoA, veteranoB);
-                    actualizarFinAtencion(peluqueroFinAtencion, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, null, null, null);
-
-                }
-                // si tiene clientes en cola
-                else{
-                    // Calculando el Proximo Fin de Atencion para el nuevo cliente
-                    calcularFinAtencion(reloj, peluqueroAsignado, distribucionAprendiz, distribucionVeteranoA, distribucionVeteranoB, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, controlEventos, dia);
-                    sacarClienteDeEspera(peluqueroFinAtencion,controlClientes);
-                    actualizarFinAtencion(peluqueroFinAtencion, finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB, rndFinAtencion, demoraAtencion, finAtencion);
-                }
-                // actualizando datos de espera, recaudacion y del objeto peluquero 
-                esperas.esperaSimultanea --;
-                actualizarRecaudacion(peluqueroFinAtencion, recaudacion,"Ganancia",dia);
-                reducirColaPeluquero(peluqueroFinAtencion, aprendiz, veteranoA, veteranoB);
-                aumentarclientesAtendidosPeluquero(peluqueroFinAtencion, aprendiz, veteranoA, veteranoB);
+            // Cuando Llega Un Cliente
+            if(esllegadaCliente(ultimaFila)){
+                let nuevaFila = new Fila();
+                nuevaFila = llegadaCliente(nuevaFila, ultimaFila, distribucionALlegada, distribucionBLlegada, probabilidadAprendiz, probabilidadVeteranoA, probabilidadVeteranoB, distribucionAAprendiz, distribucionBAprendiz, distribucionAVeteranoA, distribucionBVeteranoA, distribucionAVeteranoB, distribucionBVeteranoB);
+                ultimaFila = nuevaFila;
             }
 
-            calcularRelojAMostrar(reloj, relojAMostrar);
+            // Cuando Fin Atencion
+            if(esFinAtencion(ultimaFila)){
+                let nuevaFila = new Fila();
+                nuevaFila = finAtencion(nuevaFila, ultimaFila, distribucionAAprendiz, distribucionBAprendiz, distribucionAVeteranoA, distribucionBVeteranoA, distribucionAVeteranoB, distribucionBVeteranoB);
+                ultimaFila = nuevaFila;
+            }
 
-            let fila = new Fila(numeroFila,controlEventos[0],relojAMostrar,proximaLlegada,peluqueroAsignado,finAtencionAprendiz, finAtencionVeteranoA, finAtencionVeteranoB,aprendiz,veteranoA,veteranoB,recaudacion,esperas,controlClientes);
-            
-            if (numeroFila >= datosFormulario.rango[0] && numeroFila <= datosFormulario.rango[1]) {
-                filasAMostrar.push(fila);
-                console.log("Fila agregado:", fila);
+            //UltimoCliente de la Jornada
+            if(finJornada){
+                if(esUltimoClienteDelDia(ultimaFila)){
+                    apertura = true;
+                }    
+            }
+
+            // Agregando fila a la lista de filas a Mostrar
+            if(ultimaFila.numero >= datosFormulario.rango[0] && ultimaFila.numero <= datosFormulario.rango[1]){
+                filasAMostrar.push(ultimaFila);
+                console.log("Fila agregado:", ultimaFila);
             } else {
                 console.log("Fila no agregado.");
             }
-            ultimaFila = fila;
+            
 
-            // Si la fila no es la primera del dia quiere decir que ocurrio un evento 
-            if(!aperturaNegocio){
-                controlEventos.shift();                
-            }
-
-            // Controlar fin de la jornada y avanzar al siguiente día si es necesario
-            if (finJornada && controlEventos.length === 0 && !controlClientes.some(cliente => cliente.estado === "")) {
-                dia++;
-                reloj = 0;
-                aperturaNegocio = true;
-                finJornada = false;
-                aprendiz.estado = "Libre";
-                veteranoA.estado = "Libre";
-                veteranoB.estado = "Libre";
-                controlEventos = [];
-                controlClientes = [];
-                console.log(`Iniciando el día ${dia}`);
-            }
-        } 
+        }
+         
         filasAMostrar.push(ultimaFila);
         let maxEsperaSimultanea = ultimaFila.esperas.maxEsperaSimultanea;
         crearTabla(maxEsperaSimultanea);
@@ -163,7 +133,7 @@ export const generarDatos = (datosFormulario) => {
             row.insertCell().textContent = fila.control.evento;
             row.insertCell().textContent = fila.control.dia;
             row.insertCell().textContent = fila.control.reloj;
-            row.insertCell().textContent = fila.control.relojAMostrar;
+            row.insertCell().textContent = fila.relojAMostrar;
             row.insertCell().textContent = fila.llegadaCliente.random;
             row.insertCell().textContent = fila.llegadaCliente.demora;
             row.insertCell().textContent = fila.llegadaCliente.llegada;

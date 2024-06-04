@@ -44,6 +44,52 @@ export class Fila{
     this.esperas = esperas;
     this.clientes = clientes;
     }
+
+    // Setters con anotaciones de tipo 'any'
+    set numero(numero) {
+        this.numero = numero;
+      }
+
+    set control(control){
+        this.control = control;
+    }
+    set relojAMostrar(relojAMostrar){
+        this.relojAMostrar = relojAMostrar;
+    }
+    set llegadaCliente(llegadaCliente){
+        this.llegadaCliente = llegadaCliente;
+    }
+    set asignacionPeluquero(asignacionPeluquero){
+        this.asignacionPeluquero = asignacionPeluquero;
+    }
+    set finAtencionAprendiz(finAtencionAprendiz){
+        this.finAtencionAprendiz = finAtencionAprendiz;
+    }
+    set finAtencionVeteranoA(finAtencionVeteranoA){
+        this.finAtencionVeteranoA = finAtencionVeteranoA;
+    }
+    set finAtencionVeteranoB(finAtencionVeteranoB){
+        this.finAtencionVeteranoB = finAtencionVeteranoB;
+    }
+    set aprendiz(aprendiz){
+        this.aprendiz = aprendiz;
+    }
+    set veteranoA(veteranoA){
+        this.veteranoA = veteranoA;
+    }
+    set veteranoB(veteranoB){
+        this.veteranoB = veteranoB;
+    }
+    set recaudacion(recaudacion){
+        this.recaudacion = recaudacion;
+    }
+    set esperas(esperas){
+        this.esperas = esperas;
+    }
+    set clientes(clientes){
+        this.clientes = clientes;
+    }
+
 }
 
 export class Control{
@@ -57,6 +103,16 @@ export class Control{
         this.dia = dia;
         this.reloj = reloj;
     }
+
+    set evento(evento){
+        this.evento = evento;
+    }
+    set dia(dia){
+        this.dia = dia;
+    }
+    set reloj(reloj){
+        this.reloj = reloj;
+    }
 }
 
 export class Evento{
@@ -66,6 +122,12 @@ export class Evento{
     */
     constructor(rnd,demora){
         this.random = rnd;
+        this.demora = demora;
+    }
+    set random(random){
+        this.random = random;
+    }
+    set demora(demora){
         this.demora = demora;
     }
 }
@@ -79,6 +141,15 @@ export class LlegadaCliente extends Evento{
         super(random, demora);
         this.llegada = llegada;
     }
+    set random(random){
+        this.random = random;
+    }
+    set demora(demora){
+        this.demora = demora;
+    }
+    set llegada(llegada){
+        this.llegada = llegada;
+    }
 }
 
 export class AsignacionPeluquero extends Evento{
@@ -90,6 +161,12 @@ export class AsignacionPeluquero extends Evento{
         super(random);
         this.peluquero = peluquero;
     }
+    set random(random){
+        this.random = random;
+    }
+    set peluquero(peluquero){
+        this.peluquero = peluquero;
+    }
 }
 
 export class FinAtencionAprendiz extends Evento{
@@ -98,6 +175,15 @@ export class FinAtencionAprendiz extends Evento{
     */
     constructor(random, demora, finAtencion){
         super(random, demora);
+        this.finAtencion = finAtencion;
+    }
+    set random(random){
+        this.random = random;
+    }
+    set demora(demora){
+        this.demora = demora;
+    }
+    set finAtencion(finAtencion){
         this.finAtencion = finAtencion;
     }
 }
@@ -111,6 +197,16 @@ export class FinAtencionVeteranoA extends Evento{
         super(random, demora);
         this.finAtencion = finAtencion;
     }
+    set random(random){
+        this.random = random;
+    }
+    set demora(demora){
+        this.demora = demora;
+    }
+    set finAtencion(finAtencion){
+        this.finAtencion = finAtencion;
+    }
+
 }
 
 export class FinAtencionVeteranoB extends Evento{
@@ -122,6 +218,16 @@ export class FinAtencionVeteranoB extends Evento{
         super(random, demora);
         this.finAtencion = finAtencion;
     }
+    set random(random){
+        this.random = random;
+    }
+    set demora(demora){
+        this.demora = demora;
+    }
+    set finAtencion(finAtencion){
+        this.finAtencion = finAtencion;
+    }
+
 }
 
 class ObjetosPermanentes{
@@ -135,6 +241,17 @@ class ObjetosPermanentes{
         this.cola = cola;
         this.clientesAtendidos = clientesAtendidos;
     }
+    
+    set estado(estado){
+        this.estado = estado;
+    }
+    set cola(cola){
+        this.cola = cola;
+    }
+    set clientesAtendidos(clientesAtendidos){
+        this.clientesAtendidos = clientesAtendidos;
+    }
+
 }
 
 export class Aprendiz extends ObjetosPermanentes{
@@ -168,6 +285,18 @@ export class Recaudacion{
         this.gananciasNetas = gananciasNetas;
         this.promedioRecaudacion = promRecaudacion;
     }
+    set gananciasDiarias(gananciasDiarias){
+        this.gananciasDiarias = gananciasDiarias;
+    }
+    set gastosDiarios(gastosDiarios){
+        this.gastosDiarios = gastosDiarios;
+    }
+    set gananciasNetas(gananciasNetas){
+        this.gananciasNetas = gananciasNetas;
+    }
+    set promedioRecaudacion(promedioRecaudacion){
+        this.promedioRecaudacion = promedioRecaudacion;
+    }
 }
 
 export class Esperas{
@@ -177,6 +306,12 @@ export class Esperas{
     */
     constructor(esperaSimultaneas, maxEsperaSimultanea){
         this.esperaSimultanea = esperaSimultaneas;
+        this.maxEsperaSimultanea = maxEsperaSimultanea;
+    }
+    set esperaSimultanea(esperaSimultanea){
+        this.esperaSimultanea = esperaSimultanea;
+    }
+    set maxEsperaSimultanea(maxEsperaSimultanea){
         this.maxEsperaSimultanea = maxEsperaSimultanea;
     }
 }
@@ -194,6 +329,21 @@ export class Cliente{
         this.estado = estado;
         this.peluquero = peluquero;
         this.momentoRefresco = momentoRefresco;
+        this.refresco = refresco;
+    }
+    set numero(numero){
+        this.numero = numero;
+    }
+    set estado(estado){
+        this.estado = estado;
+    }
+    set peluquero(peluquero){
+        this.peluquero = peluquero;
+    }
+    set momentoRefresco(momentoRefresco){
+        this.momentoRefresco = momentoRefresco;
+    }
+    set refresco(refresco){
         this.refresco = refresco;
     }
 }
