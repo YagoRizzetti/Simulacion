@@ -13,47 +13,27 @@
 
     <!-- Formulario de datos -->
     <div class="form-data">
-        <h2 class="title-div-1">Formulario de Carga de Datos</h2>
+        <h2 class="title-div-1">Agencia de Automoviles</h2>
         <fieldset class="fieldset">
             <legend class="legend">Tamaño de la Muestra</legend>
-            <label class="label">Tamaño</label><input id="tamaño" class="input" type="number" placeholder="10" min="1" required>
+            <label class="label">Cantidad de Meses</label><input id="tamaño" value="30" class="input" type="number" placeholder="30" min="1" required>
         </fieldset>
         <fieldset class="fieldset fieldset-2">
-            <legend class="legend">Probabilidad del Tipo de Destinatario</legend>
-            <label class="label">Probabilidad de que fuera paciente</label><input id="tipo1" class="input" type="text" placeholder="0.60" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
-            <label class="label">Probabilidad de que haya asistido a la clinica</label><input id="tipo2" class="input" type="text" placeholder="0.25" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
-            <label class="label">Probabilidad de que nunca haya asistido a la clinica</label><input id="tipo3" class="input" type="text" placeholder="0.15" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99">
+            <legend class="legend">Probabilidad de cantidad de Ventas por mes por vendedor</legend>
+            <label class="label">Probabilidad de que venda menos de 5</label><input id="vendeMenosDe5" class="input" type="text" value="0.05" placeholder="0.05" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
+            <label class="label">Probabilidad de que venda 5</label><input id="vende5" class="input" type="text" value="0.04" placeholder="0.04" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
+            <label class="label">Probabilidad de que venda 6</label><input id="vende6" class="input" type="text" value="0.11" placeholder="0.11" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
+            <label class="label">Probabilidad de que venda 7</label><input id="vende7" class="input" type="text" value="0.15" placeholder="0.15" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
+            <label class="label">Probabilidad de que venda 8</label><input id="vende8" class="input" type="text" value="0.26" placeholder="0.26" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
+            <label class="label">Probabilidad de que venda 9</label><input id="vende9" class="input" type="text" value="0.18" placeholder="0.18" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
+            <label class="label">Probabilidad de que venda 10</label><input id="vende10" class="input" type="text" value="0.15" placeholder="0.15" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
+            <label class="label">Probabilidad de que venda mas de 10</label><input id="vendeMasde10" class="input" type="text" value="0.05" placeholder="0.05" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
         </fieldset>
         <fieldset class="fieldset">
-            <legend class="legend">Probabilidad de solicitud de asesor por tipo de destinatario</legend>
-            <div>
-                <h2>Tipo de destinatario: Paciente</h2>
-                <label class="label">Probabilidad de que necesite un asesor   </label><input id="asesorTipo1Si" class="input" type="text" placeholder="0.50" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
-                <label class="label">Probabilidad de que no necesite un asesor</label><input id="asesorTipo1No" class="input" type="text" placeholder="0.50" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
-            </div>
-            <div>
-                <h2>Tipo de Destinatario: asistio a la clinica</h2>
-                <label class="label">Probabilidad de que necesite un asesor   </label><input id="asesorTipo2Si" class="input" type="text" placeholder="0.40" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
-                <label class="label">Probabilidad de que no necesite un asesor</label><input id="asesorTipo2No" class="input" type="text" placeholder="0.60" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
-            </div>
-            <div>
-                <h2>Tipo de Destinatario: Nunca asistio a la clinica</h2>
-                <label class="label">Probabilidad de que necesite un asesor   </label><input id="asesorTipo3Si" class="input" type="text" placeholder="0.15" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
-                <label class="label">Probabilidad de que no necesite un asesor</label><input id="asesorTipo3No" class="input" type="text" placeholder="0.85" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
-            </div>
-        </fieldset>
-        <fieldset class="fieldset">
-            <legend class="legend">Rango de la Muestra a visualizar</legend>
-            <div class="div-inline">
-                <div class="div-2">
-                    <label class="label label-2">Desde la Fila:</label>
-                    <input id="rangoDesde" class="input input-2" type="number" placeholder="100" required min="1">
-                </div>
-                <div class="div-2">
-                    <label class="label label-2">Hasta la Fila:</label>
-                    <input id="rangoHasta" class="input input-2" type="number" placeholder="200" required>
-                </div>
-            </div>
+            <legend class="legend">Probabilidad de vender un tipo de Automovil</legend>
+            <label class="label">Probabilidad de que venda un auto Compacto</label><input id="probAutoCompacto" class="input" type="text" value="0.5" placeholder="0.5" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
+            <label class="label">Probabilidad de que venda un auto Mediano</label><input id="probAutoMediano" class="input" type="text" value="0.35" placeholder="0.35" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99"><br>
+            <label class="label">Probabilidad de que venda un auto de lujo</label><input id="probAutoLujo" class="input" type="text" value="0.15" placeholder="0.15" required pattern="0\.\d{1,2}" title="Ingrese un número decimal entre 0.01 y 0.99">
         </fieldset>
         <div class="div-button-2">
             <button class="button submit" type="button" onclick="generarDatos(obtenerDatosFormulario())">Generar Datos</button>
@@ -68,15 +48,170 @@
             <table class="table-data">
                 <thead class="thead">
                     <tr>
-                        <th>Numero de Mail</th>
-                        <th>RND Tipo Paciente</th>
-                        <th>Tipo de Paciente</th>
-                        <th>RND Necesita asesor</th>
-                        <th>Necesita asesor</th>
-                        <th>Cantidad de Asesores</th>
-                        <th>Asesores por Paciente</th>
-                        <th>Asesores por Asistio a la Clinica</th>
-                        <th>Asesores por Nunca Asistio a la Clinica</th>
+                        <th colspan="1"></th>
+                        <th colspan="2">Ventas Vendedor 1</th>
+                        <th colspan="2">Ventas Vendedor 2</th>
+                        <th colspan="2">Ventas Vendedor 2</th>
+                        <th colspan="40">Automoviles Vendidos por el vendedor 1</th>
+                        <th colspan="40">Automoviles Vendidos por el vendedor 2</th>
+                        <th colspan="40">Automoviles Vendidos por el vendedor 3</th>
+                        <th colspan="6">Estadisticas Vendedor 1</th>
+                        <th colspan="6">Estadisticas Vendedor 2</th>
+                        <th colspan="6">Estadisticas Vendedor 3</th>
+                        
+                    </tr>
+                    <tr>
+                        <th>Numero de Mes</th>
+                        <th>RND</th>
+                        <th>Ventas</th>
+                        <th>RND</th>
+                        <th>Ventas</th>
+                        <th>RND</th>
+                        <th>Ventas</th>
+
+                        <th>RND Vehiculo 1</th>
+                        <th>Vehiculo 1</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 2</th>
+                        <th>Vehiculo 2</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 3</th>
+                        <th>Vehiculo 3</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 4</th>
+                        <th>Vehiculo 4</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 5</th>
+                        <th>Vehiculo 5</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 6</th>
+                        <th>Vehiculo 6</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 7</th>
+                        <th>Vehiculo 7</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 8</th>
+                        <th>Vehiculo 8</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 9</th>
+                        <th>Vehiculo 9</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 10</th>
+                        <th>Vehiculo 10</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+
+                        <th>RND Vehiculo 1</th>
+                        <th>Vehiculo 1</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 2</th>
+                        <th>Vehiculo 2</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 3</th>
+                        <th>Vehiculo 3</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 4</th>
+                        <th>Vehiculo 4</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 5</th>
+                        <th>Vehiculo 5</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 6</th>
+                        <th>Vehiculo 6</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 7</th>
+                        <th>Vehiculo 7</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 8</th>
+                        <th>Vehiculo 8</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 9</th>
+                        <th>Vehiculo 9</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 10</th>
+                        <th>Vehiculo 10</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+
+                        <th>RND Vehiculo 1</th>
+                        <th>Vehiculo 1</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 2</th>
+                        <th>Vehiculo 2</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 3</th>
+                        <th>Vehiculo 3</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 4</th>
+                        <th>Vehiculo 4</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 5</th>
+                        <th>Vehiculo 5</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 6</th>
+                        <th>Vehiculo 6</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 7</th>
+                        <th>Vehiculo 7</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 8</th>
+                        <th>Vehiculo 8</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 9</th>
+                        <th>Vehiculo 9</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+                        <th>RND Vehiculo 10</th>
+                        <th>Vehiculo 10</th>
+                        <th>RND Comision</th>
+                        <th>Comision</th>
+
+                        <th>Cantidad Compactos</th>
+                        <th>Cantidad Medianos</th>
+                        <th>Cantidad de Lujo</th>
+                        <th>Comision Total del Mes</th>
+                        <th>Comision Total Acumulada</th>
+                        <th>Comision Promedio</th>
+
+                        <th>Cantidad Compactos</th>
+                        <th>Cantidad Medianos</th>
+                        <th>Cantidad de Lujo</th>
+                        <th>Comision Total del Mes</th>
+                        <th>Comision Total Acumulada</th>
+                        <th>Comision Promedio</th>
+
+                        <th>Cantidad Compactos</th>
+                        <th>Cantidad Medianos</th>
+                        <th>Cantidad de Lujo</th>
+                        <th>Comision Total del Mes</th>
+                        <th>Comision Total Acumulada</th>
+                        <th>Comision Promedio</th>
                     </tr>
                 </thead>
                 <tbody class="tbody">
