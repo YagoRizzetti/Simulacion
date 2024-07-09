@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <script src="Generador.js"></script>
+    <script type="module">        
+        import {generarDatos, obtenerDatosFormulario, limpiarFormulario} from './Generador.js';
+        window.generarDatos = generarDatos;
+        window.obtenerDatosFormulario = obtenerDatosFormulario;
+        window.limpiarFormulario = limpiarFormulario;</script>
     <title>TP3</title>
 </head>
 
@@ -58,6 +62,7 @@
                         <th colspan="6">Estadisticas Vendedor 1</th>
                         <th colspan="6">Estadisticas Vendedor 2</th>
                         <th colspan="6">Estadisticas Vendedor 3</th>
+                        <th colspan="2">Estadisticas General</th>
                         
                     </tr>
                     <tr>
@@ -210,6 +215,9 @@
                         <th>Cantidad Medianos</th>
                         <th>Cantidad de Lujo</th>
                         <th>Comision Total del Mes</th>
+                        <th>Comision Total Acumulada</th>
+                        <th>Comision Promedio</th>
+
                         <th>Comision Total Acumulada</th>
                         <th>Comision Promedio</th>
                     </tr>
