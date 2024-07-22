@@ -5,6 +5,9 @@ let rnd = 0;
 let cantidad = 0;
 let resultado = [];
 rnd = generarRandom();
+if(rnd==1){
+    rnd = rnd - 0.01
+}
 let i = 0;
 let b = 4;
 let porcentaje = 0;

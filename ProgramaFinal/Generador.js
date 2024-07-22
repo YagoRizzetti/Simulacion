@@ -86,6 +86,7 @@ export function generarDatos(datosFormulario) {
     
             // Insertamos las celdas con la información de cada mail
             fila.insertCell().textContent = mes.numero;
+            fila.cells[0].classList.add('sticky-col');
             fila.insertCell().textContent = mes.CantidadVentas1[0];
             fila.insertCell().textContent = mes.CantidadVentas1[1];
             fila.insertCell().textContent = mes.CantidadVentas2[0];

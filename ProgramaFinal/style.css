@@ -145,7 +145,15 @@ th, td{
 th{
     background-color: #333;
     height: 40px;
+    position: sticky;
+}
 
+thead{
+    position: sticky;
+    top: 0;
+    background-color: #222;
+    z-index: 2; /* Asegúrate de que la cabecera quede encima del contenido */
+    padding: 10px;
 }
 
 td{
@@ -175,4 +183,11 @@ table{
     overflow-x: auto;
     max-height: 500px;
     overflow-y: auto;
+}
+
+.sticky-col {
+    position: -webkit-sticky; /* Necesario para Safari */
+    position: sticky;
+    left: 0;
+    z-index: 1;
 }
